@@ -4,9 +4,11 @@ Initial import of the Renson WAVES Home Assistant integration.
 
 Changes:
 
-- Move integration into `custom_components/renson_waves/`.
-- Add `manifest.json`, `config_flow.py`, `coordinator.py`, `client.py`, `sensor.py`, `fan.py`, and translations.
-- Add `LICENSE` (MIT) and setup guide.
+
+Features added in this release:
+- Add `async_set_room_boost` client method and coordinator wrapper.
+- Register HA services: `renson_waves.start_room_boost` and `renson_waves.stop_room_boost`.
+
 
 Notes:
 
