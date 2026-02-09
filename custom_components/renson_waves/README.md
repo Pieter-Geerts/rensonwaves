@@ -1,6 +1,8 @@
 ````markdown
 # Renson WAVES Home Assistant Integration
 
+![Renson WAVES](../../images/renson.jpeg)
+
 A Home Assistant integration for Renson WAVES ventilation devices.
 
 ## Features
@@ -99,6 +101,7 @@ After installation, add the integration through the UI:
 ### Sensors not showing values
 
 - Check that the coordinator has refreshed data (should happen every 30 seconds)
+
 # Renson WAVES Home Assistant Integration
 
 A Home Assistant integration for Renson WAVES ventilation devices.
@@ -126,10 +129,10 @@ A Home Assistant integration for Renson WAVES ventilation devices.
 ### Manual Installation
 
 1. Clone the repository to your `custom_components` directory:
-    ```bash
-    git clone https://github.com/Pieter-Geerts/rensonwaves.git \
-    ~/.homeassistant/custom_components/renson_waves
-    ```
+   ```bash
+   git clone https://github.com/Pieter-Geerts/rensonwaves.git \
+   ~/.homeassistant/custom_components/renson_waves
+   ```
 2. Restart Home Assistant
 
 ## Configuration
@@ -161,10 +164,10 @@ Example YAML service call to start a room boost:
 ```yaml
 service: renson_waves.start_room_boost
 data:
-   room: "room"
-   level: 21.0
-   timeout: 900
-   remaining: 0
+  room: "room"
+  level: 21.0
+  timeout: 900
+  remaining: 0
 ```
 
 Example YAML service call to stop a room boost:
@@ -172,7 +175,7 @@ Example YAML service call to stop a room boost:
 ```yaml
 service: renson_waves.stop_room_boost
 data:
-   room: "room"
+  room: "room"
 ```
 
 ## Supported Sensors
@@ -225,3 +228,4 @@ MIT License - See LICENSE file for details
 ## Support
 
 For issues, feature requests, or questions, please open an issue on GitHub.
+````
