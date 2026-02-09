@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import logging
 from typing import Any
+import typing
 
 import aiohttp
 
@@ -20,21 +21,21 @@ class RensonWavesClient:
         self.base_url = f"http://{host}:{port}"
         self.session: aiohttp.ClientSession | None = None
 
-    async def async_get_constellation(self) -> dict[str, Any]:
+    async def async_get_constellation(self) -> dict[str, typing.Any]:
         """Get complete device configuration."""
         return await self._async_request("/v1/constellation")
 
-    async def async_get_sensors(self) -> dict[str, Any]:
+    async def async_get_sensors(self) -> dict[str, typing.Any]:
         """Get sensor data."""
         return await self._async_request("/v1/constellation/sensor")
 
-    async def async_get_actuators(self) -> dict[str, Any]:
+    async def async_get_actuators(self) -> dict[str, typing.Any]:
         """Get actuator data."""
         return await self._async_request("/v1/constellation/actuator")
 
     async def _async_request(
-        self, endpoint: str, method: str = "GET", **kwargs: Any
-    ) -> dict[str, Any]:
+        self, endpoint: str, method: str = "GET", **kwargs: typing.Any
+    ) -> dict[str, typing.Any]:
         """Make a request to the device."""
         if self.session is None:
             self.session = aiohttp.ClientSession()
