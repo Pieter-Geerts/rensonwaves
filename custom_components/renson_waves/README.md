@@ -23,11 +23,35 @@ A Home Assistant integration for Renson WAVES ventilation devices.
 7. Go to Settings > Devices & Services > Create Integration
 8. Search for "Renson WAVES"
 
+# Renson WAVES Home Assistant Integration
+
+A Home Assistant integration for Renson WAVES ventilation devices.
+
+## Features
+
+- **Sensor Support**: Temperature, Humidity, Absolute Humidity, AVOC (VOC), Pressure, Signal Strength
+- **Fan Control**: View fan speed and control ventilation (when control endpoints are available)
+- **Local Polling**: Fetches data directly from the device on your local network
+- **HACS Compatible**: Install directly from Home Assistant Community Store
+
+## Installation
+
+### Via HACS (Recommended)
+
+1. Go to HACS > Integrations
+2. Click the three dots menu and select "Custom repositories"
+3. Add: `https://github.com/Pieter-Geerts/rensonwaves`
+4. Select "Integration" category
+5. Click "Install"
+6. Restart Home Assistant
+7. Go to Settings > Devices & Services > Create Integration
+8. Search for "Renson WAVES"
+
 ### Manual Installation
 
 1. Clone the repository to your `custom_components` directory:
    ```bash
-   git clone https://github.com/yourgithub/ha-renson-waves.git \
+   git clone https://github.com/Pieter-Geerts/rensonwaves.git \
    ~/.homeassistant/custom_components/renson_waves
    ```
 2. Restart Home Assistant
@@ -92,4 +116,3 @@ MIT License - See LICENSE file for details
 ## Support
 
 For issues, feature requests, or questions, please open an issue on GitHub.
-````
