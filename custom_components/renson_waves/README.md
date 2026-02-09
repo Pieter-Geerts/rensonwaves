@@ -1,6 +1,8 @@
 ````markdown
 # Renson WAVES Home Assistant Integration
 
+<p align="center">[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Donate-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/pietergeerts)</p>
+
 ![Renson WAVES](../../images/renson.jpeg)
 
 A Home Assistant integration for Renson WAVES ventilation devices.
