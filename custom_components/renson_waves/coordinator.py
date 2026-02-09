@@ -37,6 +37,36 @@ class RensonWavesCoordinator(DataUpdateCoordinator):
         )
         self.entry = entry
 
+    async def async_set_room_boost(
+        self,
+        room: str,
+        enable: bool = True,
+        level: float = 21.0,
+        timeout: int = 900,
+        remaining: int = 0,
+    ) -> bool:
+        """Wrapper to set a room boost via the client and refresh data.
+
+        Returns True on success.
+        """
+        try:
+            result = await self.client.async_set_room_boost(
+                room=room,
+                enable=enable,
+                level=level,
+                timeout=timeout,
+                remaining=remaining,
+            )
+
+            if result:
+                # Refresh coordinator data after a successful change
+                await self.async_request_refresh()
+
+            return result
+        except Exception as err:
+            _LOGGER.error("Error setting room boost for %s: %s", room, err)
+            return False
+
     async def _async_update_data(self) -> dict[str, Any]:
         """Update data from device."""
         try:

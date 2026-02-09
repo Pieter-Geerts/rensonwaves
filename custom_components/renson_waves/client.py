@@ -67,3 +67,47 @@ class RensonWavesClient:
         """Close the session."""
         if self.session:
             await self.session.close()
+
+    async def async_set_room_boost(
+        self,
+        room: str,
+        enable: bool = True,
+        level: float = 21.0,
+        timeout: int = 900,
+        remaining: int = 0,
+    ) -> bool:
+        """Send a PUT request to set room boost.
+
+        Example endpoint: PUT /v1/decision/room/{room}/boost
+        Body: {"enable": true, "level": 21.0, "timeout": 900, "remaining": 0}
+        Returns True on success (HTTP 200/204), False otherwise.
+        """
+        endpoint = f"/v1/decision/room/{room}/boost"
+        payload = {
+            "enable": enable,
+            "level": float(level),
+            "timeout": int(timeout),
+            "remaining": int(remaining),
+        }
+
+        if self.session is None:
+            self.session = aiohttp.ClientSession()
+
+        url = f"{self.base_url}{endpoint}"
+
+        try:
+            async with self.session.put(url, json=payload, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+                if resp.status in (200, 204):
+                    _LOGGER.debug("Successfully set room boost for %s", room)
+                    return True
+                _LOGGER.error("Failed to set room boost %s: HTTP %s", room, resp.status)
+                return False
+        except asyncio.TimeoutError:
+            _LOGGER.error("Timeout setting room boost for %s", room)
+            return False
+        except aiohttp.ClientError as err:
+            _LOGGER.error("Connection error setting room boost for %s: %s", room, err)
+            return False
+        except Exception as err:
+            _LOGGER.exception("Unexpected error setting room boost for %s: %s", room, err)
+            return False

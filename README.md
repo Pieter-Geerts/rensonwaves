@@ -1,5 +1,7 @@
 # Renson WAVES Home Assistant Integration
 
+<p align="center">[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Donate-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/pietergeerts)</p>
+
 A Home Assistant integration for Renson WAVES ventilation devices.
 
 ## Features
@@ -43,14 +45,14 @@ After installation, add the integration through the UI:
 
 ## Supported Sensors
 
-| Sensor | Unit | Type |
-|--------|------|------|
-| Temperature | °C | Temperature |
-| Humidity | % | Humidity |
-| Absolute Humidity | g/kg | Humidity |
-| AVOC (VOC) | ppm | Air Quality |
-| Pressure | Pa | Pressure |
-| Signal Strength | dBm | Signal Strength |
+| Sensor            | Unit | Type            |
+| ----------------- | ---- | --------------- |
+| Temperature       | °C   | Temperature     |
+| Humidity          | %    | Humidity        |
+| Absolute Humidity | g/kg | Humidity        |
+| AVOC (VOC)        | ppm  | Air Quality     |
+| Pressure          | Pa   | Pressure        |
+| Signal Strength   | dBm  | Signal Strength |
 
 ## Known Limitations
 
@@ -66,15 +68,18 @@ After installation, add the integration through the UI:
 ## Troubleshooting
 
 ### Integration won't connect
+
 - Ensure the WAVES device is on the same network
 - Check the device IP address is correct
 - Verify the device is responding to HTTP requests on port 80
 
 ### Sensors not showing values
+
 - Check that the coordinator has refreshed data (should happen every 30 seconds)
 - Look for errors in the Home Assistant logs
 
 ### Missing control endpoints
+
 If you discover additional endpoints for fan control, please open an issue or PR!
 
 ## Contributing
