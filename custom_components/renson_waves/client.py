@@ -1,3 +1,15 @@
+"""API client for Renson WAVES device."""
+from __future__ import annotations
+
+import asyncio
+import logging
+from typing import Any
+
+import aiohttp
+
+_LOGGER = logging.getLogger(__name__)
+
+
 class RensonWavesClient:
     """Client for communicating with Renson WAVES device."""
 
