@@ -16,7 +16,7 @@ A Home Assistant integration for Renson WAVES ventilation devices.
 
 1. Go to HACS > Integrations
 2. Click the three dots menu and select "Custom repositories"
-3. Add: `https://github.com/yourgithub/ha-renson-waves`
+3. Add: `https://github.com/Pieter-Geerts/rensonwaves`
 4. Select "Integration" category
 5. Click "Install"
 6. Restart Home Assistant
