@@ -147,7 +147,7 @@ class VOCSensor(RensonWavesSensorBase):
 
     _attr_native_unit_of_measurement = "ppm"
     _attr_state_class = SensorStateClass.MEASUREMENT
-    _attr_name = "AVOC"
+    _attr_name = "VOC"
 
     @property
     def native_value(self) -> float | None:

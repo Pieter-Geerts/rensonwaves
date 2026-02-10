@@ -3,7 +3,7 @@
 
 <p align="center">[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Donate-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/pietergeerts)</p>
 
-![Renson WAVES](../../images/renson.jpeg)
+![Renson WAVES](../../images/icon.jpeg)
 
 A Home Assistant integration for Renson WAVES ventilation devices.
 

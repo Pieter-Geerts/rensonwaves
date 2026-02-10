@@ -108,9 +108,35 @@ class VentilationFan(CoordinatorEntity, FanEntity):
 
     async def async_set_percentage(self, percentage: int) -> None:
         """Set fan speed."""
-        # TODO: Implement PWM control endpoint
-        # This would require a POST/PUT endpoint to set fan speed
+        # If asked to stop the fan (0%), map this to disabling the room boost
+        # by sending the expected payload to the device via the coordinator.
+        if percentage == 0:
+            # Determine room identifier: prefer explicit mapping if present,
+            # fall back to actuator name or actuator id.
+            room = None
+            # actuator_data may contain a 'room' key depending on device data
+            if isinstance(self.actuator_data, dict):
+                room = self.actuator_data.get("room")
+                if room is None:
+                    room = self.actuator_data.get("name")
+
+            if room is None:
+                room = self.actuator_id
+
+            _LOGGER.debug("Stopping fan; setting room boost disable for '%s'", room)
+
+            # Send disable payload: enable=false, level=0.0, timeout=0, remaining=0
+            result = await self.coordinator.async_set_room_boost(
+                room=room, enable=False, level=0.0, timeout=0, remaining=0
+            )
+
+            if not result:
+                _LOGGER.error("Failed to stop fan / disable room boost for '%s'", room)
+            return
+
+        # Non-zero percentage control is currently not implemented.
         _LOGGER.warning(
-            "Fan speed control not yet implemented. "
-            "Requires POST endpoint to device."
+            "Manual fan speed (%s%%) control not implemented. "
+            "Only stop (0%%) is supported at the moment.",
+            percentage,
         )
