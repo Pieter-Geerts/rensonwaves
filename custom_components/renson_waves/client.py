@@ -33,6 +33,26 @@ class RensonWavesClient:
         """Get actuator data."""
         return await self._async_request("/v1/constellation/actuator")
 
+    async def async_get_global_uptime(self) -> dict[str, typing.Any]:
+        """Get device uptime."""
+        return await self._async_request("/v1/global/uptime")
+
+    async def async_get_wifi_status(self) -> dict[str, typing.Any]:
+        """Get WiFi client status."""
+        return await self._async_request("/v1/wifi/client/status")
+
+    async def async_get_decision_room(self) -> dict[str, typing.Any]:
+        """Get decision room data."""
+        return await self._async_request("/v1/decision/room")
+
+    async def async_get_decision_silent(self) -> dict[str, typing.Any]:
+        """Get silent mode configuration."""
+        return await self._async_request("/v1/decision/silent")
+
+    async def async_get_decision_breeze(self) -> dict[str, typing.Any]:
+        """Get breeze mode configuration."""
+        return await self._async_request("/v1/decision/breeze")
+
     async def _async_request(
         self, endpoint: str, method: str = "GET", **kwargs: typing.Any
     ) -> dict[str, typing.Any]:
@@ -110,4 +130,77 @@ class RensonWavesClient:
             return False
         except Exception as err:
             _LOGGER.exception("Unexpected error setting room boost for %s: %s", room, err)
+            return False
+
+    async def async_set_room_boost_default(
+        self,
+        enable: bool = True,
+        level: float = 21.0,
+        timeout: int = 900,
+        remaining: int = 0,
+    ) -> bool:
+        """Set room boost without specifying a room.
+
+        Example endpoint: PUT /v1/decision/room/boost
+        Body: {"enable": true, "level": 21.0, "timeout": 900, "remaining": 0}
+        """
+        payload = {
+            "enable": enable,
+            "level": float(level),
+            "timeout": int(timeout),
+            "remaining": int(remaining),
+        }
+
+        if self.session is None:
+            self.session = aiohttp.ClientSession()
+
+        url = f"{self.base_url}/v1/decision/room/boost"
+
+        try:
+            async with self.session.put(
+                url,
+                json=payload,
+                timeout=aiohttp.ClientTimeout(total=10),
+            ) as resp:
+                if resp.status in (200, 204):
+                    _LOGGER.debug("Successfully set default room boost")
+                    return True
+                _LOGGER.error("Failed to set default room boost: HTTP %s", resp.status)
+                return False
+        except asyncio.TimeoutError:
+            _LOGGER.error("Timeout setting default room boost")
+            return False
+        except aiohttp.ClientError as err:
+            _LOGGER.error("Connection error setting default room boost: %s", err)
+            return False
+        except Exception as err:
+            _LOGGER.exception("Unexpected error setting default room boost: %s", err)
+            return False
+
+    async def async_set_decision_silent(self, payload: dict[str, typing.Any]) -> bool:
+        """Set silent mode configuration via PUT /v1/decision/silent."""
+        if self.session is None:
+            self.session = aiohttp.ClientSession()
+
+        url = f"{self.base_url}/v1/decision/silent"
+
+        try:
+            async with self.session.put(
+                url,
+                json=payload,
+                timeout=aiohttp.ClientTimeout(total=10),
+            ) as resp:
+                if resp.status in (200, 204):
+                    _LOGGER.debug("Successfully set silent mode")
+                    return True
+                _LOGGER.error("Failed to set silent mode: HTTP %s", resp.status)
+                return False
+        except asyncio.TimeoutError:
+            _LOGGER.error("Timeout setting silent mode")
+            return False
+        except aiohttp.ClientError as err:
+            _LOGGER.error("Connection error setting silent mode: %s", err)
+            return False
+        except Exception as err:
+            _LOGGER.exception("Unexpected error setting silent mode: %s", err)
             return False
