@@ -1,6 +1,6 @@
 # Renson WAVES Home Assistant Integration
 
-<p align="center">[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Donate-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/pietergeerts)</p>
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/pietergeerts)
 
 A Home Assistant integration for Renson WAVES ventilation devices.
 
@@ -85,6 +85,10 @@ If you discover additional endpoints for fan control, please open an issue or PR
 ## Contributing
 
 Contributions are welcome! Please feel free to open issues or submit pull requests.
+
+## Disclaimer
+
+This project is not affiliated with or endorsed by Renson. I am not an employee of Renson. If there are any concerns, please contact me and I will address them.
 
 ## License
 
