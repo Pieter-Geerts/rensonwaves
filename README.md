@@ -64,6 +64,13 @@ After installation, add the integration through the UI:
 - `GET /v1/constellation` - Complete device configuration
 - `GET /v1/constellation/sensor` - Sensor data
 - `GET /v1/constellation/actuator` - Actuator data
+- `GET /v1/global/uptime` - Device uptime
+- `GET /v1/wifi/client/status` - WiFi status
+- `GET /v1/decision/room` - Decision room state
+- `PUT /v1/decision/room/boost` - Default room boost control
+- `GET /v1/decision/silent` - Silent mode configuration
+- `PUT /v1/decision/silent` - Silent mode configuration update
+- `GET /v1/decision/breeze` - Breeze mode configuration
 
 ## Troubleshooting
 
