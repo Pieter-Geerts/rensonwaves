@@ -1,6 +1,7 @@
 """Data coordinator for Renson WAVES integration."""
 from __future__ import annotations
 
+import asyncio
 import logging
 from datetime import timedelta
 from typing import Any
@@ -67,6 +68,49 @@ class RensonWavesCoordinator(DataUpdateCoordinator):
             _LOGGER.error("Error setting room boost for %s: %s", room, err)
             return False
 
+    async def async_set_room_boost_default(
+        self,
+        enable: bool = True,
+        level: float = 21.0,
+        timeout: int = 900,
+        remaining: int = 0,
+    ) -> bool:
+        """Set room boost without specifying a room.
+
+        Returns True on success.
+        """
+        try:
+            result = await self.client.async_set_room_boost_default(
+                enable=enable,
+                level=level,
+                timeout=timeout,
+                remaining=remaining,
+            )
+
+            if result:
+                await self.async_request_refresh()
+
+            return result
+        except Exception as err:
+            _LOGGER.error("Error setting default room boost: %s", err)
+            return False
+
+    async def async_set_decision_silent(self, payload: dict[str, Any]) -> bool:
+        """Set silent mode configuration.
+
+        Returns True on success.
+        """
+        try:
+            result = await self.client.async_set_decision_silent(payload)
+
+            if result:
+                await self.async_request_refresh()
+
+            return result
+        except Exception as err:
+            _LOGGER.error("Error setting silent mode: %s", err)
+            return False
+
     async def _async_update_data(self) -> dict[str, Any]:
         """Update data from device."""
         try:
@@ -74,7 +118,31 @@ class RensonWavesCoordinator(DataUpdateCoordinator):
             
             if not data:
                 raise UpdateFailed("Failed to fetch data from WAVES device")
-            
+
+            results = await asyncio.gather(
+                self.client.async_get_global_uptime(),
+                self.client.async_get_wifi_status(),
+                self.client.async_get_decision_room(),
+                self.client.async_get_decision_silent(),
+                self.client.async_get_decision_breeze(),
+                return_exceptions=True,
+            )
+
+            keys = [
+                "global_uptime",
+                "wifi_status",
+                "decision_room",
+                "decision_silent",
+                "decision_breeze",
+            ]
+
+            for key, result in zip(keys, results):
+                if isinstance(result, Exception):
+                    _LOGGER.debug("Optional endpoint %s failed: %s", key, result)
+                    data[key] = {}
+                else:
+                    data[key] = result or {}
+
             return data
             
         except Exception as err:

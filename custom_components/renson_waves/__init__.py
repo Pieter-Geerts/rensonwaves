@@ -16,6 +16,7 @@ DOMAIN: Final = "renson_waves"
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
     Platform.FAN,
+    Platform.BINARY_SENSOR,
 ]
 
 
@@ -55,6 +56,46 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         await coordinator.async_set_room_boost(room=room, enable=False)
 
+    async def _handle_set_room_boost_default(call):
+        """Handle service call to set default room boost."""
+        enable = call.data.get("enable", True)
+        level = call.data.get("level", 21.0)
+        timeout = call.data.get("timeout", 900)
+        remaining = call.data.get("remaining", 0)
+
+        await coordinator.async_set_room_boost_default(
+            enable=enable,
+            level=level,
+            timeout=timeout,
+            remaining=remaining,
+        )
+
+    async def _handle_set_silent_mode(call):
+        """Handle service call to set silent mode configuration."""
+        payload = call.data.get("payload")
+        if not isinstance(payload, dict):
+            current = coordinator.data.get("decision_silent", {}) if coordinator.data else {}
+            payload = {
+                "enable": call.data.get("enable", current.get("enable", False)),
+                "reduction": call.data.get("reduction", current.get("reduction", 0)),
+            }
+
+            for day in [
+                "monday",
+                "tuesday",
+                "wednesday",
+                "thursday",
+                "friday",
+                "saturday",
+                "sunday",
+            ]:
+                if day in call.data:
+                    payload[day] = call.data[day]
+                elif day in current:
+                    payload[day] = current[day]
+
+        await coordinator.async_set_decision_silent(payload)
+
     hass.services.async_register(
         DOMAIN,
         "start_room_boost",
@@ -66,6 +107,20 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         DOMAIN,
         "stop_room_boost",
         _handle_stop_room_boost,
+        schema=None,
+    )
+
+    hass.services.async_register(
+        DOMAIN,
+        "set_room_boost_default",
+        _handle_set_room_boost_default,
+        schema=None,
+    )
+
+    hass.services.async_register(
+        DOMAIN,
+        "set_silent_mode",
+        _handle_set_silent_mode,
         schema=None,
     )
 

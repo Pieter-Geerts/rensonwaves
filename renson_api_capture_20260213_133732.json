@@ -1,0 +1,1227 @@
+[
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/global/uptime",
+      "host": "192.168.0.228",
+      "path": "/v1/global/uptime",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:37:52.231024"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "17"
+      },
+      "body": "{\"uptime\":407949}",
+      "body_json": {
+        "uptime": 407949
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/wifi/client/status",
+      "host": "192.168.0.228",
+      "path": "/v1/wifi/client/status",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:37:52.820170"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "83"
+      },
+      "body": "{\"status\":\"connected\",\"ssid\":\"Gebo\",\"IP\":\"192.168.0.228\",\"MAC\":\"4c:eb:d6:60:3a:dc\"}",
+      "body_json": {
+        "status": "connected",
+        "ssid": "Gebo",
+        "IP": "192.168.0.228",
+        "MAC": "4c:eb:d6:60:3a:dc"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/decision/room",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/room",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:37:54.016557"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "950"
+      },
+      "body": "{\"profile\":1,\"type\":\"BathRoom\",\"minimum\":8.5,\"nominal\":50.0,\"boost\":{\"enable\":false,\"level\":100.0,\"timeout\":900,\"remaining\":0,\"default_level\":100.0,\"default_timeout\":900},\"stop_flow_decision_control\":{\"enable\":false},\"demand\":{\"relative_humidity\":{\"dynamic\":{\"enable\":true,\"minimum\":35.0,\"maximum\":0.033,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":true,\"minimum\":75.0,\"maximum\":80.0,\"coefficients\":[0.0,1.0],\"average\":60,\"decay\":1800}},\"absolute_humidity\":{\"dynamic\":{\"enable\":false,\"minimum\":4.0,\"maximum\":0.005,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}},\"VOC\":{\"dynamic\":{\"enable\":true,\"minimum\":0.0,\"maximum\":7.0,\"restore\":20.0,\"average\":300,\"decay\":300,\"timeout\":1800},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}}}}",
+      "body_json": {
+        "profile": 1,
+        "type": "BathRoom",
+        "minimum": 8.5,
+        "nominal": 50.0,
+        "boost": {
+          "enable": false,
+          "level": 100.0,
+          "timeout": 900,
+          "remaining": 0,
+          "default_level": 100.0,
+          "default_timeout": 900
+        },
+        "stop_flow_decision_control": {
+          "enable": false
+        },
+        "demand": {
+          "relative_humidity": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 35.0,
+              "maximum": 0.033,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": true,
+              "minimum": 75.0,
+              "maximum": 80.0,
+              "coefficients": [
+                0.0,
+                1.0
+              ],
+              "average": 60,
+              "decay": 1800
+            }
+          },
+          "absolute_humidity": {
+            "dynamic": {
+              "enable": false,
+              "minimum": 4.0,
+              "maximum": 0.005,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          },
+          "VOC": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 0.0,
+              "maximum": 7.0,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 300,
+              "timeout": 1800
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/decision/room",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/room",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:37:54.354220"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "950"
+      },
+      "body": "{\"profile\":1,\"type\":\"BathRoom\",\"minimum\":8.5,\"nominal\":50.0,\"boost\":{\"enable\":false,\"level\":100.0,\"timeout\":900,\"remaining\":0,\"default_level\":100.0,\"default_timeout\":900},\"stop_flow_decision_control\":{\"enable\":false},\"demand\":{\"relative_humidity\":{\"dynamic\":{\"enable\":true,\"minimum\":35.0,\"maximum\":0.033,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":true,\"minimum\":75.0,\"maximum\":80.0,\"coefficients\":[0.0,1.0],\"average\":60,\"decay\":1800}},\"absolute_humidity\":{\"dynamic\":{\"enable\":false,\"minimum\":4.0,\"maximum\":0.005,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}},\"VOC\":{\"dynamic\":{\"enable\":true,\"minimum\":0.0,\"maximum\":7.0,\"restore\":20.0,\"average\":300,\"decay\":300,\"timeout\":1800},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}}}}",
+      "body_json": {
+        "profile": 1,
+        "type": "BathRoom",
+        "minimum": 8.5,
+        "nominal": 50.0,
+        "boost": {
+          "enable": false,
+          "level": 100.0,
+          "timeout": 900,
+          "remaining": 0,
+          "default_level": 100.0,
+          "default_timeout": 900
+        },
+        "stop_flow_decision_control": {
+          "enable": false
+        },
+        "demand": {
+          "relative_humidity": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 35.0,
+              "maximum": 0.033,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": true,
+              "minimum": 75.0,
+              "maximum": 80.0,
+              "coefficients": [
+                0.0,
+                1.0
+              ],
+              "average": 60,
+              "decay": 1800
+            }
+          },
+          "absolute_humidity": {
+            "dynamic": {
+              "enable": false,
+              "minimum": 4.0,
+              "maximum": 0.005,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          },
+          "VOC": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 0.0,
+              "maximum": 7.0,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 300,
+              "timeout": 1800
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/decision/room",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/room",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:37:58.048456"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "950"
+      },
+      "body": "{\"profile\":1,\"type\":\"BathRoom\",\"minimum\":8.5,\"nominal\":50.0,\"boost\":{\"enable\":false,\"level\":100.0,\"timeout\":900,\"remaining\":0,\"default_level\":100.0,\"default_timeout\":900},\"stop_flow_decision_control\":{\"enable\":false},\"demand\":{\"relative_humidity\":{\"dynamic\":{\"enable\":true,\"minimum\":35.0,\"maximum\":0.033,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":true,\"minimum\":75.0,\"maximum\":80.0,\"coefficients\":[0.0,1.0],\"average\":60,\"decay\":1800}},\"absolute_humidity\":{\"dynamic\":{\"enable\":false,\"minimum\":4.0,\"maximum\":0.005,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}},\"VOC\":{\"dynamic\":{\"enable\":true,\"minimum\":0.0,\"maximum\":7.0,\"restore\":20.0,\"average\":300,\"decay\":300,\"timeout\":1800},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}}}}",
+      "body_json": {
+        "profile": 1,
+        "type": "BathRoom",
+        "minimum": 8.5,
+        "nominal": 50.0,
+        "boost": {
+          "enable": false,
+          "level": 100.0,
+          "timeout": 900,
+          "remaining": 0,
+          "default_level": 100.0,
+          "default_timeout": 900
+        },
+        "stop_flow_decision_control": {
+          "enable": false
+        },
+        "demand": {
+          "relative_humidity": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 35.0,
+              "maximum": 0.033,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": true,
+              "minimum": 75.0,
+              "maximum": 80.0,
+              "coefficients": [
+                0.0,
+                1.0
+              ],
+              "average": 60,
+              "decay": 1800
+            }
+          },
+          "absolute_humidity": {
+            "dynamic": {
+              "enable": false,
+              "minimum": 4.0,
+              "maximum": 0.005,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          },
+          "VOC": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 0.0,
+              "maximum": 7.0,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 300,
+              "timeout": 1800
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "http://192.168.0.228/v1/decision/room/boost",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/room/boost",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "Content-Length": "57",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:02.706640",
+      "body": "{\"enable\":true,\"level\":200.0,\"timeout\":900,\"remaining\":0}",
+      "body_json": {
+        "enable": true,
+        "level": 200.0,
+        "timeout": 900,
+        "remaining": 0
+      }
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "0"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/decision/room",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/room",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:03.581062"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "951"
+      },
+      "body": "{\"profile\":1,\"type\":\"BathRoom\",\"minimum\":8.5,\"nominal\":50.0,\"boost\":{\"enable\":true,\"level\":200.0,\"timeout\":900,\"remaining\":899,\"default_level\":100.0,\"default_timeout\":900},\"stop_flow_decision_control\":{\"enable\":false},\"demand\":{\"relative_humidity\":{\"dynamic\":{\"enable\":true,\"minimum\":35.0,\"maximum\":0.033,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":true,\"minimum\":75.0,\"maximum\":80.0,\"coefficients\":[0.0,1.0],\"average\":60,\"decay\":1800}},\"absolute_humidity\":{\"dynamic\":{\"enable\":false,\"minimum\":4.0,\"maximum\":0.005,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}},\"VOC\":{\"dynamic\":{\"enable\":true,\"minimum\":0.0,\"maximum\":7.0,\"restore\":20.0,\"average\":300,\"decay\":300,\"timeout\":1800},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}}}}",
+      "body_json": {
+        "profile": 1,
+        "type": "BathRoom",
+        "minimum": 8.5,
+        "nominal": 50.0,
+        "boost": {
+          "enable": true,
+          "level": 200.0,
+          "timeout": 900,
+          "remaining": 899,
+          "default_level": 100.0,
+          "default_timeout": 900
+        },
+        "stop_flow_decision_control": {
+          "enable": false
+        },
+        "demand": {
+          "relative_humidity": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 35.0,
+              "maximum": 0.033,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": true,
+              "minimum": 75.0,
+              "maximum": 80.0,
+              "coefficients": [
+                0.0,
+                1.0
+              ],
+              "average": 60,
+              "decay": 1800
+            }
+          },
+          "absolute_humidity": {
+            "dynamic": {
+              "enable": false,
+              "minimum": 4.0,
+              "maximum": 0.005,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          },
+          "VOC": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 0.0,
+              "maximum": 7.0,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 300,
+              "timeout": 1800
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "http://192.168.0.228/v1/decision/room/boost",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/room/boost",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "Content-Length": "54",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:07.351744",
+      "body": "{\"enable\":false,\"level\":0.0,\"timeout\":0,\"remaining\":0}",
+      "body_json": {
+        "enable": false,
+        "level": 0.0,
+        "timeout": 0,
+        "remaining": 0
+      }
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "0"
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/decision/room",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/room",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:08.489129"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "950"
+      },
+      "body": "{\"profile\":1,\"type\":\"BathRoom\",\"minimum\":8.5,\"nominal\":50.0,\"boost\":{\"enable\":false,\"level\":100.0,\"timeout\":900,\"remaining\":0,\"default_level\":100.0,\"default_timeout\":900},\"stop_flow_decision_control\":{\"enable\":false},\"demand\":{\"relative_humidity\":{\"dynamic\":{\"enable\":true,\"minimum\":35.0,\"maximum\":0.033,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":true,\"minimum\":75.0,\"maximum\":80.0,\"coefficients\":[0.0,1.0],\"average\":60,\"decay\":1800}},\"absolute_humidity\":{\"dynamic\":{\"enable\":false,\"minimum\":4.0,\"maximum\":0.005,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}},\"VOC\":{\"dynamic\":{\"enable\":true,\"minimum\":0.0,\"maximum\":7.0,\"restore\":20.0,\"average\":300,\"decay\":300,\"timeout\":1800},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}}}}",
+      "body_json": {
+        "profile": 1,
+        "type": "BathRoom",
+        "minimum": 8.5,
+        "nominal": 50.0,
+        "boost": {
+          "enable": false,
+          "level": 100.0,
+          "timeout": 900,
+          "remaining": 0,
+          "default_level": 100.0,
+          "default_timeout": 900
+        },
+        "stop_flow_decision_control": {
+          "enable": false
+        },
+        "demand": {
+          "relative_humidity": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 35.0,
+              "maximum": 0.033,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": true,
+              "minimum": 75.0,
+              "maximum": 80.0,
+              "coefficients": [
+                0.0,
+                1.0
+              ],
+              "average": 60,
+              "decay": 1800
+            }
+          },
+          "absolute_humidity": {
+            "dynamic": {
+              "enable": false,
+              "minimum": 4.0,
+              "maximum": 0.005,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          },
+          "VOC": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 0.0,
+              "maximum": 7.0,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 300,
+              "timeout": 1800
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/global/uptime",
+      "host": "192.168.0.228",
+      "path": "/v1/global/uptime",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:20.499627"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "17"
+      },
+      "body": "{\"uptime\":407978}",
+      "body_json": {
+        "uptime": 407978
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/decision/silent",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/silent",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:23.964543"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "601"
+      },
+      "body": "{\"enable\":false,\"reduction\":21.0,\"monday\":[{\"time\":\"08:00:00\",\"silent\":false},{\"time\":\"22:00:00\",\"silent\":true}],\"tuesday\":[{\"time\":\"08:00:00\",\"silent\":false},{\"time\":\"22:00:00\",\"silent\":true}],\"wednesday\":[{\"time\":\"08:00:00\",\"silent\":false},{\"time\":\"22:00:00\",\"silent\":true}],\"thursday\":[{\"time\":\"08:00:00\",\"silent\":false},{\"time\":\"22:00:00\",\"silent\":true}],\"friday\":[{\"time\":\"08:00:00\",\"silent\":false},{\"time\":\"22:00:00\",\"silent\":true}],\"saturday\":[{\"time\":\"08:00:00\",\"silent\":false},{\"time\":\"22:00:00\",\"silent\":true}],\"sunday\":[{\"time\":\"08:00:00\",\"silent\":false},{\"time\":\"22:00:00\",\"silent\":true}]}",
+      "body_json": {
+        "enable": false,
+        "reduction": 21.0,
+        "monday": [
+          {
+            "time": "08:00:00",
+            "silent": false
+          },
+          {
+            "time": "22:00:00",
+            "silent": true
+          }
+        ],
+        "tuesday": [
+          {
+            "time": "08:00:00",
+            "silent": false
+          },
+          {
+            "time": "22:00:00",
+            "silent": true
+          }
+        ],
+        "wednesday": [
+          {
+            "time": "08:00:00",
+            "silent": false
+          },
+          {
+            "time": "22:00:00",
+            "silent": true
+          }
+        ],
+        "thursday": [
+          {
+            "time": "08:00:00",
+            "silent": false
+          },
+          {
+            "time": "22:00:00",
+            "silent": true
+          }
+        ],
+        "friday": [
+          {
+            "time": "08:00:00",
+            "silent": false
+          },
+          {
+            "time": "22:00:00",
+            "silent": true
+          }
+        ],
+        "saturday": [
+          {
+            "time": "08:00:00",
+            "silent": false
+          },
+          {
+            "time": "22:00:00",
+            "silent": true
+          }
+        ],
+        "sunday": [
+          {
+            "time": "08:00:00",
+            "silent": false
+          },
+          {
+            "time": "22:00:00",
+            "silent": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/decision/room",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/room",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:24.855074"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "950"
+      },
+      "body": "{\"profile\":1,\"type\":\"BathRoom\",\"minimum\":8.5,\"nominal\":50.0,\"boost\":{\"enable\":false,\"level\":100.0,\"timeout\":900,\"remaining\":0,\"default_level\":100.0,\"default_timeout\":900},\"stop_flow_decision_control\":{\"enable\":false},\"demand\":{\"relative_humidity\":{\"dynamic\":{\"enable\":true,\"minimum\":35.0,\"maximum\":0.033,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":true,\"minimum\":75.0,\"maximum\":80.0,\"coefficients\":[0.0,1.0],\"average\":60,\"decay\":1800}},\"absolute_humidity\":{\"dynamic\":{\"enable\":false,\"minimum\":4.0,\"maximum\":0.005,\"restore\":20.0,\"average\":300,\"decay\":900,\"timeout\":7200},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}},\"VOC\":{\"dynamic\":{\"enable\":true,\"minimum\":0.0,\"maximum\":7.0,\"restore\":20.0,\"average\":300,\"decay\":300,\"timeout\":1800},\"static\":{\"enable\":false,\"minimum\":99999.898,\"maximum\":99999.898,\"coefficients\":[0.0,0.0],\"average\":30,\"decay\":1}}}}",
+      "body_json": {
+        "profile": 1,
+        "type": "BathRoom",
+        "minimum": 8.5,
+        "nominal": 50.0,
+        "boost": {
+          "enable": false,
+          "level": 100.0,
+          "timeout": 900,
+          "remaining": 0,
+          "default_level": 100.0,
+          "default_timeout": 900
+        },
+        "stop_flow_decision_control": {
+          "enable": false
+        },
+        "demand": {
+          "relative_humidity": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 35.0,
+              "maximum": 0.033,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": true,
+              "minimum": 75.0,
+              "maximum": 80.0,
+              "coefficients": [
+                0.0,
+                1.0
+              ],
+              "average": 60,
+              "decay": 1800
+            }
+          },
+          "absolute_humidity": {
+            "dynamic": {
+              "enable": false,
+              "minimum": 4.0,
+              "maximum": 0.005,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 900,
+              "timeout": 7200
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          },
+          "VOC": {
+            "dynamic": {
+              "enable": true,
+              "minimum": 0.0,
+              "maximum": 7.0,
+              "restore": 20.0,
+              "average": 300,
+              "decay": 300,
+              "timeout": 1800
+            },
+            "static": {
+              "enable": false,
+              "minimum": 99999.898,
+              "maximum": 99999.898,
+              "coefficients": [
+                0.0,
+                0.0
+              ],
+              "average": 30,
+              "decay": 1
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/constellation/sensor",
+      "host": "192.168.0.228",
+      "path": "/v1/constellation/sensor",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:25.638826"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "1563"
+      },
+      "body": "{\"0\":{\"type\":\"temp\",\"name\":\"temp\",\"basic_id\":0,\"active\":true,\"device_type\":\"ESP\",\"device_id\":\"ESP\",\"room\":[0],\"parameter\":{\"temperature\":{\"unit\":\"deg C\",\"value\":18.4}}},\"1\":{\"type\":\"rh\",\"name\":\"rh\",\"basic_id\":0,\"active\":true,\"device_type\":\"ESP\",\"device_id\":\"ESP\",\"room\":[0],\"parameter\":{\"humidity\":{\"unit\":\"pct\",\"value\":53.0}}},\"2\":{\"type\":\"ah\",\"name\":\"ah\",\"basic_id\":0,\"active\":true,\"device_type\":\"ESP\",\"device_id\":\"ESP\",\"room\":[0],\"parameter\":{\"humidity\":{\"unit\":\"g/kg\",\"value\":8.33}}},\"3\":{\"type\":\"avoc\",\"name\":\"avoc\",\"basic_id\":0,\"active\":true,\"device_type\":\"ESP\",\"device_id\":\"ESP\",\"room\":[0],\"parameter\":{\"raw\":{\"unit\":\"ppm\",\"value\":52479.0}}},\"4\":{\"type\":\"press\",\"name\":\"press\",\"basic_id\":0,\"active\":true,\"device_type\":\"ESP\",\"device_id\":\"ESP\",\"room\":[0],\"parameter\":{\"pressure\":{\"unit\":\"Pa\",\"value\":0.0}}},\"5\":{\"type\":\"decision\",\"name\":\"decision\",\"basic_id\":0,\"active\":true,\"device_type\":\"ESP\",\"device_id\":\"ESP\",\"room\":[0],\"parameter\":{\"trigger\":{\"unit\":\"\",\"value\":\"None\"}}},\"7\":{\"type\":\"heap_info\",\"name\":\"heap_info\",\"basic_id\":0,\"active\":true,\"device_type\":\"ESP\",\"device_id\":\"ESP\",\"room\":[0],\"parameter\":{\"average_current_heap\":{\"unit\":\"\",\"value\":72873.0},\"max_current_heap\":{\"unit\":\"\",\"value\":73136.0},\"min_current_heap\":{\"unit\":\"\",\"value\":72256.0},\"absolute_minimum_heap\":{\"unit\":\"\",\"value\":11864.0},\"maximum_block_size\":{\"unit\":\"\",\"value\":57344.0}}},\"8\":{\"type\":\"rssi\",\"name\":\"rssi\",\"basic_id\":0,\"active\":true,\"device_type\":\"ESP\",\"device_id\":\"ESP\",\"room\":[0],\"parameter\":{\"rssi\":{\"unit\":\"dBm\",\"value\":-68.0},\"power_save_mode\":{\"unit\":\"\",\"value\":0.0}}}}",
+      "body_json": {
+        "0": {
+          "type": "temp",
+          "name": "temp",
+          "basic_id": 0,
+          "active": true,
+          "device_type": "ESP",
+          "device_id": "ESP",
+          "room": [
+            0
+          ],
+          "parameter": {
+            "temperature": {
+              "unit": "deg C",
+              "value": 18.4
+            }
+          }
+        },
+        "1": {
+          "type": "rh",
+          "name": "rh",
+          "basic_id": 0,
+          "active": true,
+          "device_type": "ESP",
+          "device_id": "ESP",
+          "room": [
+            0
+          ],
+          "parameter": {
+            "humidity": {
+              "unit": "pct",
+              "value": 53.0
+            }
+          }
+        },
+        "2": {
+          "type": "ah",
+          "name": "ah",
+          "basic_id": 0,
+          "active": true,
+          "device_type": "ESP",
+          "device_id": "ESP",
+          "room": [
+            0
+          ],
+          "parameter": {
+            "humidity": {
+              "unit": "g/kg",
+              "value": 8.33
+            }
+          }
+        },
+        "3": {
+          "type": "avoc",
+          "name": "avoc",
+          "basic_id": 0,
+          "active": true,
+          "device_type": "ESP",
+          "device_id": "ESP",
+          "room": [
+            0
+          ],
+          "parameter": {
+            "raw": {
+              "unit": "ppm",
+              "value": 52479.0
+            }
+          }
+        },
+        "4": {
+          "type": "press",
+          "name": "press",
+          "basic_id": 0,
+          "active": true,
+          "device_type": "ESP",
+          "device_id": "ESP",
+          "room": [
+            0
+          ],
+          "parameter": {
+            "pressure": {
+              "unit": "Pa",
+              "value": 0.0
+            }
+          }
+        },
+        "5": {
+          "type": "decision",
+          "name": "decision",
+          "basic_id": 0,
+          "active": true,
+          "device_type": "ESP",
+          "device_id": "ESP",
+          "room": [
+            0
+          ],
+          "parameter": {
+            "trigger": {
+              "unit": "",
+              "value": "None"
+            }
+          }
+        },
+        "7": {
+          "type": "heap_info",
+          "name": "heap_info",
+          "basic_id": 0,
+          "active": true,
+          "device_type": "ESP",
+          "device_id": "ESP",
+          "room": [
+            0
+          ],
+          "parameter": {
+            "average_current_heap": {
+              "unit": "",
+              "value": 72873.0
+            },
+            "max_current_heap": {
+              "unit": "",
+              "value": 73136.0
+            },
+            "min_current_heap": {
+              "unit": "",
+              "value": 72256.0
+            },
+            "absolute_minimum_heap": {
+              "unit": "",
+              "value": 11864.0
+            },
+            "maximum_block_size": {
+              "unit": "",
+              "value": 57344.0
+            }
+          }
+        },
+        "8": {
+          "type": "rssi",
+          "name": "rssi",
+          "basic_id": 0,
+          "active": true,
+          "device_type": "ESP",
+          "device_id": "ESP",
+          "room": [
+            0
+          ],
+          "parameter": {
+            "rssi": {
+              "unit": "dBm",
+              "value": -68.0
+            },
+            "power_save_mode": {
+              "unit": "",
+              "value": 0.0
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "GET",
+      "url": "http://192.168.0.228/v1/decision/breeze",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/breeze",
+      "headers": {
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:26.605232"
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "37"
+      },
+      "body": "{\"enable\":true,\"temp_threshold\":30.0}",
+      "body_json": {
+        "enable": true,
+        "temp_threshold": 30.0
+      }
+    }
+  },
+  {
+    "request": {
+      "method": "PUT",
+      "url": "http://192.168.0.228/v1/decision/silent",
+      "host": "192.168.0.228",
+      "path": "/v1/decision/silent",
+      "headers": {
+        "Content-Type": "application/json; charset=utf-8",
+        "Accept": "application/json",
+        "X-API-Key": "",
+        "Content-Length": "558",
+        "User-Agent": "Dalvik/2.1.0 (Linux; U; Android 13; DN2103 Build/TP1A.220905.001)",
+        "Host": "192.168.0.228",
+        "Connection": "Keep-Alive",
+        "Accept-Encoding": "gzip"
+      },
+      "timestamp": "2026-02-13T13:38:41.350279",
+      "body": "{\"enable\":true,\"reduction\":21.0,\"monday\":[{\"silent\":true,\"time\":\"22:00\"},{\"silent\":false,\"time\":\"08:00\"}],\"tuesday\":[{\"silent\":true,\"time\":\"22:00\"},{\"silent\":false,\"time\":\"08:00\"}],\"wednesday\":[{\"silent\":true,\"time\":\"22:00\"},{\"silent\":false,\"time\":\"08:00\"}],\"thursday\":[{\"silent\":true,\"time\":\"22:00\"},{\"silent\":false,\"time\":\"08:00\"}],\"friday\":[{\"silent\":true,\"time\":\"22:00\"},{\"silent\":false,\"time\":\"08:00\"}],\"saturday\":[{\"silent\":true,\"time\":\"22:00\"},{\"silent\":false,\"time\":\"08:00\"}],\"sunday\":[{\"silent\":true,\"time\":\"22:00\"},{\"silent\":false,\"time\":\"08:00\"}]}",
+      "body_json": {
+        "enable": true,
+        "reduction": 21.0,
+        "monday": [
+          {
+            "silent": true,
+            "time": "22:00"
+          },
+          {
+            "silent": false,
+            "time": "08:00"
+          }
+        ],
+        "tuesday": [
+          {
+            "silent": true,
+            "time": "22:00"
+          },
+          {
+            "silent": false,
+            "time": "08:00"
+          }
+        ],
+        "wednesday": [
+          {
+            "silent": true,
+            "time": "22:00"
+          },
+          {
+            "silent": false,
+            "time": "08:00"
+          }
+        ],
+        "thursday": [
+          {
+            "silent": true,
+            "time": "22:00"
+          },
+          {
+            "silent": false,
+            "time": "08:00"
+          }
+        ],
+        "friday": [
+          {
+            "silent": true,
+            "time": "22:00"
+          },
+          {
+            "silent": false,
+            "time": "08:00"
+          }
+        ],
+        "saturday": [
+          {
+            "silent": true,
+            "time": "22:00"
+          },
+          {
+            "silent": false,
+            "time": "08:00"
+          }
+        ],
+        "sunday": [
+          {
+            "silent": true,
+            "time": "22:00"
+          },
+          {
+            "silent": false,
+            "time": "08:00"
+          }
+        ]
+      }
+    },
+    "response": {
+      "status_code": 200,
+      "headers": {
+        "Content-Type": "application/json",
+        "Content-Length": "0"
+      }
+    }
+  }
+]
