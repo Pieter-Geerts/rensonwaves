@@ -1,0 +1,169 @@
+start_room_boost:
+  name: Start room boost
+  description: Start room boost for a specific room.
+  fields:
+    room:
+      name: Room
+      description: Index of the room.
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 255
+          mode: box
+    level:
+      name: Level
+      description: Target temperature level.
+      required: false
+      default: 21.0
+      selector:
+        number:
+          min: 0
+          max: 40
+          step: 0.1
+          mode: box
+    timeout:
+      name: Timeout
+      description: Boost timeout in seconds.
+      required: false
+      default: 900
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: box
+    remaining:
+      name: Remaining
+      description: Remaining time in seconds.
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: box
+
+stop_room_boost:
+  name: Stop room boost
+  description: Stop room boost for a specific room.
+  fields:
+    room:
+      name: Room
+      description: Index of the room.
+      required: true
+      selector:
+        number:
+          min: 0
+          max: 255
+          mode: box
+
+set_room_boost_default:
+  name: Set room boost default
+  description: Set default room boost behavior.
+  fields:
+    enable:
+      name: Enable
+      description: Enable default room boost.
+      required: false
+      default: true
+      selector:
+        boolean: {}
+    level:
+      name: Level
+      description: Default temperature level.
+      required: false
+      default: 21.0
+      selector:
+        number:
+          min: 0
+          max: 40
+          step: 0.1
+          mode: box
+    timeout:
+      name: Timeout
+      description: Default timeout in seconds.
+      required: false
+      default: 900
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: box
+    remaining:
+      name: Remaining
+      description: Default remaining time in seconds.
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: box
+
+set_silent_mode:
+  name: Set silent mode
+  description: Update silent mode settings.
+  fields:
+    payload:
+      name: Payload
+      description: Full silent mode payload object.
+      required: false
+      selector:
+        object: {}
+    enable:
+      name: Enable
+      description: Enable silent mode.
+      required: false
+      selector:
+        boolean: {}
+    reduction:
+      name: Reduction
+      description: Silent mode reduction level.
+      required: false
+      selector:
+        number:
+          min: 0
+          max: 100
+          mode: slider
+    monday:
+      name: Monday
+      description: Monday schedule object.
+      required: false
+      selector:
+        object: {}
+    tuesday:
+      name: Tuesday
+      description: Tuesday schedule object.
+      required: false
+      selector:
+        object: {}
+    wednesday:
+      name: Wednesday
+      description: Wednesday schedule object.
+      required: false
+      selector:
+        object: {}
+    thursday:
+      name: Thursday
+      description: Thursday schedule object.
+      required: false
+      selector:
+        object: {}
+    friday:
+      name: Friday
+      description: Friday schedule object.
+      required: false
+      selector:
+        object: {}
+    saturday:
+      name: Saturday
+      description: Saturday schedule object.
+      required: false
+      selector:
+        object: {}
+    sunday:
+      name: Sunday
+      description: Sunday schedule object.
+      required: false
+      selector:
+        object: {}

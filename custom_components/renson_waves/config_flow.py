@@ -3,12 +3,12 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from urllib.parse import urlparse
 
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_NAME
+from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .client import RensonWavesClient
 
@@ -45,6 +45,10 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     # Extract device name from response
                     device_name = data.get("global", {}).get("device_name", {}).get("value", "WAVES Device")
                     serial = data.get("global", {}).get("serial", {}).get("value", "unknown")
+
+                    unique_id = serial if serial and serial != "unknown" else user_input[CONF_HOST]
+                    await self.async_set_unique_id(unique_id)
+                    self._abort_if_unique_id_configured()
                     
                     return self.async_create_entry(
                         title=device_name,
@@ -89,6 +93,10 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         device_name = data.get("global", {}).get("device_name", {}).get("value", "WAVES Device")
         serial = data.get("global", {}).get("serial", {}).get("value", "unknown")
+
+        unique_id = serial if serial and serial != "unknown" else host
+        await self.async_set_unique_id(unique_id)
+        self._abort_if_unique_id_configured()
 
         # Abort if this host is already configured
         self._async_abort_entries_match({CONF_HOST: host})
