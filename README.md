@@ -86,6 +86,31 @@ If you discover additional endpoints for fan control, please open an issue or PR
 
 Contributions are welcome! Please feel free to open issues or submit pull requests.
 
+## Development validation (Dev Container)
+
+This repository includes:
+
+- [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json) for a reproducible VS Code dev environment
+- [`scripts/validate_ci_local.sh`](scripts/validate_ci_local.sh) to run the same CI validations locally
+
+### Run local CI checks
+
+1. Open this repository in VS Code
+2. Run **Dev Containers: Reopen in Container**
+3. Ensure Docker Desktop is running on your host
+4. Run:
+
+   ```bash
+   ./scripts/validate_ci_local.sh
+   ```
+
+This executes:
+
+- HACS validation workflow (`.github/workflows/validate.yml`)
+- Hassfest workflow (`.github/workflows/hassfest.yml`)
+
+These are the same checks used in GitHub Actions for pull requests.
+
 ## License
 
 MIT License - See LICENSE file for details
