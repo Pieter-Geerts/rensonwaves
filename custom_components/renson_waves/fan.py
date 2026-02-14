@@ -6,8 +6,8 @@ from typing import Any
 
 from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -45,7 +45,7 @@ async def async_setup_entry(
 class VentilationFan(CoordinatorEntity, FanEntity):
     """Ventilation fan entity."""
 
-    _attr_supported_features = FanEntityFeature.SET_SPEED
+    _attr_supported_features = FanEntityFeature.TURN_ON | FanEntityFeature.TURN_OFF
 
     def __init__(
         self,
@@ -58,7 +58,8 @@ class VentilationFan(CoordinatorEntity, FanEntity):
         super().__init__(coordinator)
         self.actuator_id = actuator_id
         self.actuator_data = actuator_data
-        self._attr_unique_id = f"{entry.data['serial']}_fan_{actuator_id}"
+        serial = entry.data.get("serial", entry.entry_id)
+        self._attr_unique_id = f"{serial}_fan_{actuator_id}"
         self._attr_name = actuator_data.get("name", f"fan_{actuator_id}")
 
     @property
@@ -71,24 +72,26 @@ class VentilationFan(CoordinatorEntity, FanEntity):
         return pwm > 0
 
     @property
-    def speed(self) -> int:
-        """Return current speed."""
+    def percentage(self) -> int | None:
+        """Return current percentage."""
         actuators = self.coordinator.data.get("actuator", {})
         actuator = actuators.get(self.actuator_id, {})
         params = actuator.get("parameter", {})
         pwm = params.get("pwm", {}).get("value", 0)
-        # Convert PWM (0-100) to percentage
         return int(pwm)
 
-    @property
-    def speed_range(self) -> tuple[int, int]:
-        """Return speed range."""
-        return (0, 100)
+    def _resolve_room_identifier(self) -> str:
+        """Resolve room identifier used by room boost endpoint."""
+        room = None
+        if isinstance(self.actuator_data, dict):
+            room = self.actuator_data.get("room")
+            if room is None:
+                room = self.actuator_data.get("name")
 
-    @property
-    def percentage(self) -> int | None:
-        """Return current percentage."""
-        return self.speed
+        if room is None:
+            room = self.actuator_id
+
+        return str(room)
 
     async def async_turn_on(
         self,
@@ -96,47 +99,33 @@ class VentilationFan(CoordinatorEntity, FanEntity):
         preset_mode: str | None = None,
         **kwargs: Any,
     ) -> None:
-        """Turn on fan."""
-        if percentage is not None:
-            await self.async_set_percentage(percentage)
-        else:
-            await self.async_set_percentage(50)
+        """Turn on fan.
+
+        WAVES currently exposes room boost style control; non-zero percentage is
+        accepted but mapped to boost enable with default payload.
+        """
+        if percentage == 0:
+            await self.async_turn_off()
+            return
+
+        room = self._resolve_room_identifier()
+        result = await self.coordinator.async_set_room_boost(
+            room=room,
+            enable=True,
+        )
+        if not result:
+            raise HomeAssistantError(f"Failed to turn on fan for room '{room}'")
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn off fan."""
-        await self.async_set_percentage(0)
-
-    async def async_set_percentage(self, percentage: int) -> None:
-        """Set fan speed."""
-        # If asked to stop the fan (0%), map this to disabling the room boost
-        # by sending the expected payload to the device via the coordinator.
-        if percentage == 0:
-            # Determine room identifier: prefer explicit mapping if present,
-            # fall back to actuator name or actuator id.
-            room = None
-            # actuator_data may contain a 'room' key depending on device data
-            if isinstance(self.actuator_data, dict):
-                room = self.actuator_data.get("room")
-                if room is None:
-                    room = self.actuator_data.get("name")
-
-            if room is None:
-                room = self.actuator_id
-
-            _LOGGER.debug("Stopping fan; setting room boost disable for '%s'", room)
-
-            # Send disable payload: enable=false, level=0.0, timeout=0, remaining=0
-            result = await self.coordinator.async_set_room_boost(
-                room=room, enable=False, level=0.0, timeout=0, remaining=0
-            )
-
-            if not result:
-                _LOGGER.error("Failed to stop fan / disable room boost for '%s'", room)
-            return
-
-        # Non-zero percentage control is currently not implemented.
-        _LOGGER.warning(
-            "Manual fan speed (%s%%) control not implemented. "
-            "Only stop (0%%) is supported at the moment.",
-            percentage,
+        room = self._resolve_room_identifier()
+        _LOGGER.debug("Turning off fan for room '%s'", room)
+        result = await self.coordinator.async_set_room_boost(
+            room=room,
+            enable=False,
+            level=0.0,
+            timeout=0,
+            remaining=0,
         )
+        if not result:
+            raise HomeAssistantError(f"Failed to turn off fan for room '{room}'")
