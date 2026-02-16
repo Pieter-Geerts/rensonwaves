@@ -116,6 +116,7 @@ class RensonWavesClient:
         url = f"{self.base_url}{endpoint}"
 
         try:
+            _LOGGER.debug("PUT %s payload=%s", url, payload)
             async with self.session.put(url, json=payload, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                 if resp.status in (200, 204):
                     _LOGGER.debug("Successfully set room boost for %s", room)
@@ -157,6 +158,7 @@ class RensonWavesClient:
         url = f"{self.base_url}/v1/decision/room/boost"
 
         try:
+            _LOGGER.debug("PUT %s payload=%s", url, payload)
             async with self.session.put(
                 url,
                 json=payload,
@@ -185,6 +187,7 @@ class RensonWavesClient:
         url = f"{self.base_url}/v1/decision/silent"
 
         try:
+            _LOGGER.debug("PUT %s payload=%s", url, payload)
             async with self.session.put(
                 url,
                 json=payload,
