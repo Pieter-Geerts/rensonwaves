@@ -121,6 +121,17 @@ class RensonWavesClient:
                 if resp.status in (200, 204):
                     _LOGGER.debug("Successfully set room boost for %s", room)
                     return True
+                if resp.status == 404:
+                    _LOGGER.debug(
+                        "Room-specific boost endpoint not found for room %s; retrying default endpoint",
+                        room,
+                    )
+                    return await self.async_set_room_boost_default(
+                        enable=enable,
+                        level=level,
+                        timeout=timeout,
+                        remaining=remaining,
+                    )
                 _LOGGER.error("Failed to set room boost %s: HTTP %s", room, resp.status)
                 return False
         except asyncio.TimeoutError:

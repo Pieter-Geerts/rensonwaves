@@ -8,19 +8,29 @@ from urllib.parse import urlparse
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_PORT
+from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
+from homeassistant.helpers import selector
 
 from .client import RensonWavesClient
 
 _LOGGER = logging.getLogger(__name__)
 
 DOMAIN = "renson_waves"
+CONF_FAN_ROOM = "fan_room"
+FAN_ROOM_AUTO = "auto"
 
 
 class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Renson WAVES."""
 
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: config_entries.ConfigEntry) -> config_entries.OptionsFlow:
+        """Get the options flow for this handler."""
+        return RensonWavesOptionsFlow(config_entry)
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -149,3 +159,85 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="no_devices_found")
 
         return await self._create_entry_from_host(host, port)
+
+
+class RensonWavesOptionsFlow(config_entries.OptionsFlow):
+    """Handle options for Renson WAVES integration."""
+
+    def __init__(self, config_entry: config_entries.ConfigEntry) -> None:
+        """Initialize options flow."""
+        self._config_entry = config_entry
+
+    async def _async_get_room_candidates(self) -> list[str]:
+        """Get candidate room identifiers from the device constellation."""
+        host = self._config_entry.data.get(CONF_HOST)
+        port = self._config_entry.data.get(CONF_PORT, 80)
+
+        if not host:
+            return []
+
+        client = RensonWavesClient(host=host, port=port)
+        try:
+            data = await client.async_get_constellation()
+            if not data:
+                return []
+
+            room_values: set[str] = set()
+
+            def _collect_room(value: Any) -> None:
+                if value is None:
+                    return
+                if isinstance(value, (list, tuple)):
+                    if value:
+                        room_values.add(str(value[0]))
+                    return
+                room_values.add(str(value))
+
+            for group in ("actuator", "sensor"):
+                group_data = data.get(group, {})
+                if not isinstance(group_data, dict):
+                    continue
+
+                for item in group_data.values():
+                    if isinstance(item, dict):
+                        _collect_room(item.get("room"))
+
+            def _sort_key(value: str) -> tuple[int, str]:
+                return (0, f"{int(value):010d}") if value.isdigit() else (1, value)
+
+            return sorted(room_values, key=_sort_key)
+        except Exception as err:
+            _LOGGER.debug("Failed to load room candidates for options flow: %s", err)
+            return []
+        finally:
+            await client.async_close()
+
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+        """Manage the integration options."""
+        if user_input is not None:
+            return self.async_create_entry(title="", data=user_input)
+
+        current_room = self._config_entry.options.get(
+            CONF_FAN_ROOM,
+            FAN_ROOM_AUTO,
+        )
+        rooms = await self._async_get_room_candidates()
+        options = [FAN_ROOM_AUTO, *rooms]
+
+        if str(current_room) not in options:
+            options.append(str(current_room))
+
+        data_schema = vol.Schema(
+            {
+                vol.Optional(CONF_FAN_ROOM, default=str(current_room)): selector.SelectSelector(
+                    selector.SelectSelectorConfig(
+                        options=options,
+                        mode=selector.SelectSelectorMode.DROPDOWN,
+                        translation_key=CONF_FAN_ROOM,
+                    )
+                )
+            }
+        )
+
+        return self.async_show_form(step_id="init", data_schema=data_schema)
+
