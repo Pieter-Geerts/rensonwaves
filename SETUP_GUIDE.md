@@ -46,35 +46,8 @@ Create `hacs.json` in the root directory:
   "issue_tracker": "https://github.com/yourgithub/ha-renson-waves/issues",
   "requirements": ["aiohttp>=3.8.0"]
 }
-```
 
-Create `LICENSE` (MIT License):
-
-```
-MIT License
-
-Copyright (c) 2024 Your Name
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE OR ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
-
-### 3. Create GitHub Repository
+### 2. Create GitHub Repository
 
 1. Create a new repository on GitHub
 2. Name it: `ha-renson-waves`
@@ -82,13 +55,13 @@ SOFTWARE.
 4. Copy the `custom_components` folder and other files
 5. Push to GitHub
 
-### 4. Update Manifest
+### 3. Update Manifest
 
 Edit `manifest.json`:
 - Replace `yourgithub` with your GitHub username
 - Update `documentation` and `issue_tracker` URLs
 
-### 5. Register with HACS
+### 4. Register with HACS
 
 1. Go to https://github.com/hacs/default
 2. Fork the repository (if you want automatic updates via HACS)

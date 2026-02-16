@@ -45,7 +45,9 @@ async def async_setup_entry(
 class VentilationFan(CoordinatorEntity, FanEntity):
     """Ventilation fan entity."""
 
-    _attr_supported_features = FanEntityFeature.TURN_ON | FanEntityFeature.TURN_OFF
+    _attr_supported_features = (
+        FanEntityFeature.TURN_ON | FanEntityFeature.TURN_OFF | FanEntityFeature.SET_SPEED
+    )
 
     def __init__(
         self,
@@ -77,8 +79,22 @@ class VentilationFan(CoordinatorEntity, FanEntity):
         actuators = self.coordinator.data.get("actuator", {})
         actuator = actuators.get(self.actuator_id, {})
         params = actuator.get("parameter", {})
-        pwm = params.get("pwm", {}).get("value", 0)
-        return int(pwm)
+        pwm_value = params.get("pwm", {}).get("value", 0)
+        try:
+            pwm = int(float(pwm_value))
+        except Exception:
+            pwm = 0
+        # Ensure we return a 0-100 percentage
+        return max(0, min(100, pwm))
+
+    async def async_added_to_hass(self) -> None:
+        """Log entity support on add for debugging."""
+        await super().async_added_to_hass()
+        _LOGGER.debug(
+            "VentilationFan added: entity_id=%s supported_features=%s",
+            self.entity_id,
+            self.supported_features,
+        )
 
     def _resolve_room_identifier(self) -> str:
         """Resolve room identifier used by room boost endpoint."""
@@ -108,6 +124,11 @@ class VentilationFan(CoordinatorEntity, FanEntity):
             await self.async_turn_off()
             return
 
+        # If a percentage is provided, prefer setting percentage (speed)
+        if percentage is not None:
+            await self.async_set_percentage(percentage)
+            return
+
         room = self._resolve_room_identifier()
         result = await self.coordinator.async_set_room_boost(
             room=room,
@@ -129,3 +150,32 @@ class VentilationFan(CoordinatorEntity, FanEntity):
         )
         if not result:
             raise HomeAssistantError(f"Failed to turn off fan for room '{room}'")
+
+    async def async_set_percentage(self, percentage: int) -> None:
+        """Set fan speed percentage (0-100).
+
+        The WAVES API expects a `level` value; map 0-100%% to the device scale.
+        Observed API captures contain levels up to 200.0, so map percentage -> level by scaling to 200.
+        """
+        if percentage is None:
+            return
+
+        if percentage == 0:
+            await self.async_turn_off()
+            return
+
+        pct = max(0, min(100, int(percentage)))
+        # Map 0-100% to device level 0-200 (observed in API captures)
+        level = float(pct) * 2.0
+
+        room = self._resolve_room_identifier()
+        _LOGGER.debug(
+            "Setting fan for room '%s' to %s%% -> level=%s", room, pct, level
+        )
+        result = await self.coordinator.async_set_room_boost(
+            room=room, enable=True, level=level
+        )
+        if not result:
+            raise HomeAssistantError(
+                f"Failed to set fan percentage for room '{room}' to {pct}%"
+            )
