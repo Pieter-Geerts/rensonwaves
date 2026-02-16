@@ -4,22 +4,19 @@ start_room_boost:
   fields:
     room:
       name: Room
-      description: Index of the room.
+      description: Room identifier (for example 0).
       required: true
       selector:
-        number:
-          min: 0
-          max: 255
-          mode: box
+        text: {}
     level:
       name: Level
-      description: Target temperature level.
+      description: Boost level.
       required: false
       default: 21.0
       selector:
         number:
           min: 0
-          max: 40
+          max: 200
           step: 0.1
           mode: box
     timeout:
@@ -49,13 +46,10 @@ stop_room_boost:
   fields:
     room:
       name: Room
-      description: Index of the room.
+      description: Room identifier (for example 0).
       required: true
       selector:
-        number:
-          min: 0
-          max: 255
-          mode: box
+        text: {}
 
 set_room_boost_default:
   name: Set room boost default
@@ -70,13 +64,13 @@ set_room_boost_default:
         boolean: {}
     level:
       name: Level
-      description: Default temperature level.
+      description: Default boost level.
       required: false
       default: 21.0
       selector:
         number:
           min: 0
-          max: 40
+          max: 200
           step: 0.1
           mode: box
     timeout:

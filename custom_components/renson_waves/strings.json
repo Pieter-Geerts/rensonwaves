@@ -19,6 +19,24 @@
       "already_configured": "This device is already configured."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Renson WAVES Options",
+        "description": "Choose how the fan target room should be resolved.",
+        "data": {
+          "fan_room": "Fan room"
+        }
+      }
+    }
+  },
+  "selector": {
+    "fan_room": {
+      "options": {
+        "auto": "Auto (use actuator room)"
+      }
+    }
+  },
   "entity": {
     "sensor": {
       "temperature": {

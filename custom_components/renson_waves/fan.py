@@ -15,6 +15,8 @@ from .coordinator import RensonWavesCoordinator
 from . import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
+CONF_FAN_ROOM = "fan_room"
+FAN_ROOM_AUTO = "auto"
 
 
 async def async_setup_entry(
@@ -58,6 +60,7 @@ class VentilationFan(CoordinatorEntity, FanEntity):
     ) -> None:
         """Initialize fan."""
         super().__init__(coordinator)
+        self._entry = entry
         self.actuator_id = actuator_id
         self.actuator_data = actuator_data
         serial = entry.data.get("serial", entry.entry_id)
@@ -98,6 +101,10 @@ class VentilationFan(CoordinatorEntity, FanEntity):
 
     def _resolve_room_identifier(self) -> str:
         """Resolve room identifier used by room boost endpoint."""
+        selected_room = self._entry.options.get(CONF_FAN_ROOM, FAN_ROOM_AUTO)
+        if selected_room not in (None, "", FAN_ROOM_AUTO):
+            return str(selected_room)
+
         room = None
         if isinstance(self.actuator_data, dict):
             room = self.actuator_data.get("room")
@@ -106,6 +113,9 @@ class VentilationFan(CoordinatorEntity, FanEntity):
 
         if room is None:
             room = self.actuator_id
+
+        if isinstance(room, (list, tuple)):
+            room = room[0] if room else self.actuator_id
 
         return str(room)
 
