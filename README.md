@@ -1,6 +1,6 @@
 # Renson WAVES Home Assistant Integration
 
-<p align="center">[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-Donate-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/pietergeerts)</p>
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/pietergeerts)
 
 A Home Assistant integration for Renson WAVES ventilation devices.
 
@@ -64,6 +64,13 @@ After installation, add the integration through the UI:
 - `GET /v1/constellation` - Complete device configuration
 - `GET /v1/constellation/sensor` - Sensor data
 - `GET /v1/constellation/actuator` - Actuator data
+- `GET /v1/global/uptime` - Device uptime
+- `GET /v1/wifi/client/status` - WiFi status
+- `GET /v1/decision/room` - Decision room state
+- `PUT /v1/decision/room/boost` - Default room boost control
+- `GET /v1/decision/silent` - Silent mode configuration
+- `PUT /v1/decision/silent` - Silent mode configuration update
+- `GET /v1/decision/breeze` - Breeze mode configuration
 
 ## Troubleshooting
 
@@ -86,30 +93,9 @@ If you discover additional endpoints for fan control, please open an issue or PR
 
 Contributions are welcome! Please feel free to open issues or submit pull requests.
 
-## Development validation (Dev Container)
+## Disclaimer
 
-This repository includes:
-
-- [`.devcontainer/devcontainer.json`](.devcontainer/devcontainer.json) for a reproducible VS Code dev environment
-- [`scripts/validate_ci_local.sh`](scripts/validate_ci_local.sh) to run the same CI validations locally
-
-### Run local CI checks
-
-1. Open this repository in VS Code
-2. Run **Dev Containers: Reopen in Container**
-3. Ensure Docker Desktop is running on your host
-4. Run:
-
-   ```bash
-   ./scripts/validate_ci_local.sh
-   ```
-
-This executes:
-
-- HACS validation workflow (`.github/workflows/validate.yml`)
-- Hassfest workflow (`.github/workflows/hassfest.yml`)
-
-These are the same checks used in GitHub Actions for pull requests.
+This project is not affiliated with or endorsed by Renson. I am not an employee of Renson. If there are any concerns, please contact me and I will address them.
 
 ## License
 
