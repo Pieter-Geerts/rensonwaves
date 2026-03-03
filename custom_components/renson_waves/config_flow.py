@@ -1,4 +1,5 @@
 """Config flow for Renson WAVES integration."""
+
 from __future__ import annotations
 
 import logging
@@ -7,10 +8,12 @@ from urllib.parse import urlparse
 
 import voluptuous as vol
 from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.core import callback
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import selector
+from homeassistant.helpers.service_info.ssdp import SsdpServiceInfo
+from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 
 from .client import RensonWavesClient
 
@@ -26,51 +29,51 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     VERSION = 1
 
+    _discovered_host: str | None = None
+    _discovered_port: int = 80
+    _discovered_name: str = "WAVES Device"
+    _discovered_serial: str | None = None
+
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry: config_entries.ConfigEntry) -> config_entries.OptionsFlow:
+    def async_get_options_flow(
+        config_entry: config_entries.ConfigEntry,
+    ) -> config_entries.OptionsFlow:
         """Get the options flow for this handler."""
         return RensonWavesOptionsFlow(config_entry)
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            # Validate the connection
-            client = RensonWavesClient(
-                host=user_input[CONF_HOST],
-                port=user_input.get(CONF_PORT, 80),
-            )
-            
-            try:
-                data = await client.async_get_constellation()
-                await client.async_close()
-                
-                if not data:
-                    errors["base"] = "cannot_connect"
-                else:
-                    # Extract device name from response
-                    device_name = data.get("global", {}).get("device_name", {}).get("value", "WAVES Device")
-                    serial = data.get("global", {}).get("serial", {}).get("value", "unknown")
+            host = user_input[CONF_HOST]
+            port = int(user_input.get(CONF_PORT, 80))
+            probe = await self._async_probe_device(host, port)
 
-                    unique_id = serial if serial and serial != "unknown" else user_input[CONF_HOST]
-                    await self.async_set_unique_id(unique_id)
-                    self._abort_if_unique_id_configured()
-                    
-                    return self.async_create_entry(
-                        title=device_name,
-                        data={
-                            CONF_HOST: user_input[CONF_HOST],
-                            CONF_PORT: user_input.get(CONF_PORT, 80),
-                            "serial": serial,
-                        },
-                    )
-            except Exception as err:
-                _LOGGER.error("Error connecting to WAVES device: %s", err)
+            if probe is None:
                 errors["base"] = "cannot_connect"
+            else:
+                device_name, serial = probe
+
+                if serial is not None:
+                    await self.async_set_unique_id(serial)
+                    self._abort_if_unique_id_configured(
+                        updates={CONF_HOST: host, CONF_PORT: port, "serial": serial}
+                    )
+                else:
+                    self._async_abort_entries_match({CONF_HOST: host})
+
+                return self.async_create_entry(
+                    title=device_name,
+                    data={
+                        CONF_HOST: host,
+                        CONF_PORT: port,
+                        "serial": serial or "unknown",
+                    },
+                )
 
         return self.async_show_form(
             step_id="user",
@@ -84,81 +87,120 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             description_placeholders={},
         )
 
-    async def _create_entry_from_host(self, host: str, port: int | None = 80) -> FlowResult:
-        """Create a config entry by contacting the device at host:port.
-
-        Returns a FlowResult (create entry or abort).
-        """
-        client = RensonWavesClient(host=host, port=port or 80)
-
+    async def _async_probe_device(
+        self, host: str, port: int
+    ) -> tuple[str, str | None] | None:
+        """Probe device and return (device_name, serial)."""
+        client = RensonWavesClient(host=host, port=port)
         try:
             data = await client.async_get_constellation()
+        except Exception as err:  # noqa: BLE001
+            _LOGGER.debug("Failed to probe WAVES device at %s:%s: %s", host, port, err)
+            return None
+        finally:
             await client.async_close()
-        except Exception as err:  # noqa: BLE001 - broad catch to convert to flow abort
-            _LOGGER.debug("Discovery contact failed for %s:%s: %s", host, port, err)
-            return self.async_abort(reason="cannot_connect")
 
         if not data:
+            return None
+
+        global_data = data.get("global", {})
+        if not isinstance(global_data, dict):
+            global_data = {}
+
+        name_data = global_data.get("device_name", {})
+        if not isinstance(name_data, dict):
+            name_data = {}
+
+        serial_data = global_data.get("serial", {})
+        if not isinstance(serial_data, dict):
+            serial_data = {}
+
+        device_name = str(name_data.get("value", "WAVES Device"))
+        serial_value = serial_data.get("value")
+        serial = str(serial_value).strip() if serial_value is not None else None
+        if serial in (None, "", "unknown"):
+            serial = None
+
+        return device_name, serial
+
+    async def _async_prepare_discovery(self, host: str, port: int) -> ConfigFlowResult:
+        """Prepare a discovered device and move to confirmation step."""
+        probe = await self._async_probe_device(host, port)
+        if probe is None:
             return self.async_abort(reason="cannot_connect")
 
-        device_name = data.get("global", {}).get("device_name", {}).get("value", "WAVES Device")
-        serial = data.get("global", {}).get("serial", {}).get("value", "unknown")
+        device_name, serial = probe
 
-        unique_id = serial if serial and serial != "unknown" else host
-        await self.async_set_unique_id(unique_id)
-        self._abort_if_unique_id_configured()
+        if serial is not None:
+            await self.async_set_unique_id(serial)
+            self._abort_if_unique_id_configured(
+                updates={CONF_HOST: host, CONF_PORT: port, "serial": serial}
+            )
+        else:
+            await self._async_handle_discovery_without_unique_id()
+            self._async_abort_entries_match({CONF_HOST: host})
 
-        # Abort if this host is already configured
-        self._async_abort_entries_match({CONF_HOST: host})
+        self._discovered_host = host
+        self._discovered_port = port
+        self._discovered_name = device_name
+        self._discovered_serial = serial
+        self.context["title_placeholders"] = {"name": device_name}
+        self._set_confirm_only()
+        return await self.async_step_confirm()
 
-        return self.async_create_entry(
-            title=device_name,
-            data={
-                CONF_HOST: host,
-                CONF_PORT: port or 80,
-                "serial": serial,
+    async def async_step_confirm(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Confirm setup for discovered device."""
+        if self._discovered_host is None:
+            return self.async_abort(reason="no_devices_found")
+
+        if user_input is not None:
+            return self.async_create_entry(
+                title=self._discovered_name,
+                data={
+                    CONF_HOST: self._discovered_host,
+                    CONF_PORT: self._discovered_port,
+                    "serial": self._discovered_serial or "unknown",
+                },
+            )
+
+        return self.async_show_form(
+            step_id="confirm",
+            description_placeholders={
+                "name": self._discovered_name,
+                "host": self._discovered_host,
+                "port": str(self._discovered_port),
             },
         )
 
-    async def async_step_zeroconf(self, discovery_info: dict[str, Any]) -> FlowResult:
-        """Handle zeroconf discovery.
+    async def async_step_zeroconf(
+        self, discovery_info: ZeroconfServiceInfo
+    ) -> ConfigFlowResult:
+        """Handle zeroconf discovery."""
+        host = discovery_info.host
+        port = discovery_info.port or 80
+        return await self._async_prepare_discovery(host, port)
 
-        discovery_info typically contains `host`, `port` and service properties.
-        """
-        host = discovery_info.get("host") or discovery_info.get("hostname")
-        port = discovery_info.get("port", 80)
+    async def async_step_ssdp(
+        self, discovery_info: SsdpServiceInfo
+    ) -> ConfigFlowResult:
+        """Handle SSDP discovery."""
+        host: str | None = None
+        port = 80
 
-        if not host:
-            # Try addresses list
-            addresses = discovery_info.get("addresses") or []
-            host = addresses[0] if addresses else None
+        location = discovery_info.ssdp_location
+        if location:
+            parsed = urlparse(location)
+            host = parsed.hostname
+            if parsed.port is not None:
+                port = parsed.port
 
-        if not host:
-            _LOGGER.debug("Zeroconf discovery without host: %s", discovery_info)
-            return self.async_abort(reason="no_devices_found")
-
-        return await self._create_entry_from_host(host, port)
-
-    async def async_step_ssdp(self, discovery_info: dict[str, Any]) -> FlowResult:
-        """Handle SSDP discovery.
-
-        SSDP discovery_info may include `ssdp_location` or `host`.
-        """
-        host = discovery_info.get("host")
-        port = discovery_info.get("port")
-
-        if not host:
-            location = discovery_info.get("ssdp_location") or discovery_info.get("location")
-            if location:
-                parsed = urlparse(location)
-                host = parsed.hostname
-                port = parsed.port or port
-
-        if not host:
+        if host is None:
             _LOGGER.debug("SSDP discovery without host: %s", discovery_info)
             return self.async_abort(reason="no_devices_found")
 
-        return await self._create_entry_from_host(host, port)
+        return await self._async_prepare_discovery(host, port)
 
 
 class RensonWavesOptionsFlow(config_entries.OptionsFlow):
@@ -212,24 +254,30 @@ class RensonWavesOptionsFlow(config_entries.OptionsFlow):
         finally:
             await client.async_close()
 
-    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> FlowResult:
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
         """Manage the integration options."""
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 
-        current_room = self._config_entry.options.get(
-            CONF_FAN_ROOM,
-            FAN_ROOM_AUTO,
+        current_room = str(
+            self._config_entry.options.get(
+                CONF_FAN_ROOM,
+                FAN_ROOM_AUTO,
+            )
         )
         rooms = await self._async_get_room_candidates()
         options = [FAN_ROOM_AUTO, *rooms]
 
-        if str(current_room) not in options:
-            options.append(str(current_room))
+        if current_room not in options:
+            options.append(current_room)
 
         data_schema = vol.Schema(
             {
-                vol.Optional(CONF_FAN_ROOM, default=str(current_room)): selector.SelectSelector(
+                vol.Optional(
+                    CONF_FAN_ROOM, default=current_room
+                ): selector.SelectSelector(
                     selector.SelectSelectorConfig(
                         options=options,
                         mode=selector.SelectSelectorMode.DROPDOWN,
@@ -240,4 +288,3 @@ class RensonWavesOptionsFlow(config_entries.OptionsFlow):
         )
 
         return self.async_show_form(step_id="init", data_schema=data_schema)
-
