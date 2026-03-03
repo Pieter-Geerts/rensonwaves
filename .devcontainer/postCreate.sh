@@ -11,7 +11,7 @@ if ! command -v act >/dev/null 2>&1; then
 fi
 
 python -m pip install --upgrade pip
-python -m pip install pre-commit
+python -m pip install pre-commit homeassistant==2024.1.0
 
 pre-commit install || true
 
