@@ -16,6 +16,7 @@ from homeassistant.const import (
     UnitOfPressure,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -90,6 +91,8 @@ async def async_setup_entry(
 class RensonWavesSensorBase(CoordinatorEntity, SensorEntity):
     """Base class for Renson WAVES sensors."""
 
+    _attr_has_entity_name = True
+
     def __init__(
         self,
         coordinator: RensonWavesCoordinator,
@@ -101,8 +104,14 @@ class RensonWavesSensorBase(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self.sensor_id = sensor_id
         self.sensor_data = sensor_data
-        self._attr_unique_id = f"{entry.data['serial']}_{sensor_id}"
-        self._attr_device_name = entry.title
+        serial = str(entry.data.get("serial", entry.entry_id))
+        self._attr_unique_id = f"{serial}_{sensor_id}"
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, serial)},
+            name=entry.title,
+            manufacturer="Renson",
+            model="WAVES",
+        )
 
 
 class TemperatureSensor(RensonWavesSensorBase):
@@ -214,6 +223,8 @@ class SignalStrengthSensor(RensonWavesSensorBase):
 class RensonWavesExtraSensorBase(CoordinatorEntity, SensorEntity):
     """Base class for extra Renson WAVES sensors."""
 
+    _attr_has_entity_name = True
+
     def __init__(
         self,
         coordinator: RensonWavesCoordinator,
@@ -222,8 +233,14 @@ class RensonWavesExtraSensorBase(CoordinatorEntity, SensorEntity):
     ) -> None:
         """Initialize sensor."""
         super().__init__(coordinator)
-        self._attr_unique_id = f"{entry.data['serial']}_{unique_key}"
-        self._attr_device_name = entry.title
+        serial = str(entry.data.get("serial", entry.entry_id))
+        self._attr_unique_id = f"{serial}_{unique_key}"
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, serial)},
+            name=entry.title,
+            manufacturer="Renson",
+            model="WAVES",
+        )
 
 
 class UptimeSensor(RensonWavesExtraSensorBase):

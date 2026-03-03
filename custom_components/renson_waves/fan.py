@@ -8,6 +8,7 @@ from homeassistant.components.fan import FanEntity, FanEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -47,6 +48,8 @@ async def async_setup_entry(
 class VentilationFan(CoordinatorEntity, FanEntity):
     """Ventilation fan entity."""
 
+    _attr_has_entity_name = True
+
     _attr_supported_features = (
         FanEntityFeature.TURN_ON | FanEntityFeature.TURN_OFF | FanEntityFeature.SET_SPEED
     )
@@ -63,8 +66,14 @@ class VentilationFan(CoordinatorEntity, FanEntity):
         self._entry = entry
         self.actuator_id = actuator_id
         self.actuator_data = actuator_data
-        serial = entry.data.get("serial", entry.entry_id)
+        serial = str(entry.data.get("serial", entry.entry_id))
         self._attr_unique_id = f"{serial}_fan_{actuator_id}"
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, serial)},
+            name=entry.title,
+            manufacturer="Renson",
+            model="WAVES",
+        )
         self._attr_name = actuator_data.get("name", f"fan_{actuator_id}")
 
     @property

@@ -4,6 +4,7 @@ from __future__ import annotations
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -32,6 +33,8 @@ async def async_setup_entry(
 class RensonWavesBinarySensorBase(CoordinatorEntity, BinarySensorEntity):
     """Base class for Renson WAVES binary sensors."""
 
+    _attr_has_entity_name = True
+
     def __init__(
         self,
         coordinator: RensonWavesCoordinator,
@@ -41,8 +44,14 @@ class RensonWavesBinarySensorBase(CoordinatorEntity, BinarySensorEntity):
     ) -> None:
         """Initialize binary sensor."""
         super().__init__(coordinator)
-        self._attr_unique_id = f"{entry.data['serial']}_{unique_key}"
-        self._attr_device_name = entry.title
+        serial = str(entry.data.get("serial", entry.entry_id))
+        self._attr_unique_id = f"{serial}_{unique_key}"
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, serial)},
+            name=entry.title,
+            manufacturer="Renson",
+            model="WAVES",
+        )
         self._attr_name = name
 
 
