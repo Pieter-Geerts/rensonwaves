@@ -50,9 +50,7 @@ class VentilationFan(CoordinatorEntity, FanEntity):
 
     _attr_has_entity_name = True
 
-    _attr_supported_features = (
-        FanEntityFeature.TURN_ON | FanEntityFeature.TURN_OFF | FanEntityFeature.SET_SPEED
-    )
+    _attr_supported_features = FanEntityFeature.SET_SPEED
 
     def __init__(
         self,

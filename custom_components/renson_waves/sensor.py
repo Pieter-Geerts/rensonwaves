@@ -209,6 +209,7 @@ class SignalStrengthSensor(RensonWavesSensorBase):
     _attr_native_unit_of_measurement = "dBm"
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_name = "Signal Strength"
+    _attr_entity_registry_enabled_default = False
 
     @property
     def native_value(self) -> float | None:
@@ -249,6 +250,7 @@ class UptimeSensor(RensonWavesExtraSensorBase):
     _attr_name = "Uptime"
     _attr_native_unit_of_measurement = "s"
     _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, coordinator: RensonWavesCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "uptime")
@@ -263,6 +265,7 @@ class WifiSsidSensor(RensonWavesExtraSensorBase):
     """WiFi SSID sensor."""
 
     _attr_name = "WiFi SSID"
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, coordinator: RensonWavesCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "wifi_ssid")
@@ -276,6 +279,7 @@ class WifiIpSensor(RensonWavesExtraSensorBase):
     """WiFi IP sensor."""
 
     _attr_name = "WiFi IP"
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, coordinator: RensonWavesCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "wifi_ip")
@@ -289,6 +293,7 @@ class WifiMacSensor(RensonWavesExtraSensorBase):
     """WiFi MAC sensor."""
 
     _attr_name = "WiFi MAC"
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, coordinator: RensonWavesCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "wifi_mac")
@@ -303,6 +308,7 @@ class DecisionRoomMinimumSensor(RensonWavesExtraSensorBase):
 
     _attr_name = "Decision Minimum"
     _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, coordinator: RensonWavesCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "decision_minimum")
@@ -318,6 +324,7 @@ class DecisionRoomNominalSensor(RensonWavesExtraSensorBase):
 
     _attr_name = "Decision Nominal"
     _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_entity_registry_enabled_default = False
 
     def __init__(self, coordinator: RensonWavesCoordinator, entry: ConfigEntry) -> None:
         super().__init__(coordinator, entry, "decision_nominal")

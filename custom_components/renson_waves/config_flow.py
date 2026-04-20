@@ -6,14 +6,13 @@ import logging
 from typing import Any
 from urllib.parse import urlparse
 
+
 import voluptuous as vol
+import aiohttp
 from homeassistant import config_entries
-from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.const import CONF_HOST, CONF_PORT
 from homeassistant.core import callback
 from homeassistant.helpers import selector
-from homeassistant.helpers.service_info.ssdp import SsdpServiceInfo
-from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
 
 from .client import RensonWavesClient
 
@@ -44,9 +43,14 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    ) -> dict:
         """Handle the initial step."""
         errors: dict[str, str] = {}
+
+        data_schema = vol.Schema({
+            vol.Required(CONF_HOST): str,
+            vol.Optional(CONF_PORT, default=80): int,
+        })
 
         if user_input is not None:
             host = user_input[CONF_HOST]
@@ -77,12 +81,7 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema(
-                {
-                    vol.Required(CONF_HOST): str,
-                    vol.Optional(CONF_PORT, default=80): int,
-                }
-            ),
+            data_schema=data_schema,
             errors=errors,
             description_placeholders={},
         )
@@ -123,7 +122,7 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         return device_name, serial
 
-    async def _async_prepare_discovery(self, host: str, port: int) -> ConfigFlowResult:
+    async def _async_prepare_discovery(self, host: str, port: int) -> dict:
         """Prepare a discovered device and move to confirmation step."""
         probe = await self._async_probe_device(host, port)
         if probe is None:
@@ -150,7 +149,7 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_confirm(
         self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    ) -> dict:
         """Confirm setup for discovered device."""
         if self._discovered_host is None:
             return self.async_abort(reason="no_devices_found")
@@ -176,7 +175,7 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_zeroconf(
         self, discovery_info: ZeroconfServiceInfo
-    ) -> ConfigFlowResult:
+    ) -> dict:
         """Handle zeroconf discovery."""
         host = discovery_info.host
         port = discovery_info.port or 80
@@ -184,7 +183,7 @@ class RensonWavesConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_ssdp(
         self, discovery_info: SsdpServiceInfo
-    ) -> ConfigFlowResult:
+    ) -> dict:
         """Handle SSDP discovery."""
         host: str | None = None
         port = 80
@@ -256,7 +255,7 @@ class RensonWavesOptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
+    ) -> dict:
         """Manage the integration options."""
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
