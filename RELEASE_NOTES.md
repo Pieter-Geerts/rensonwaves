@@ -1,3 +1,9 @@
+# v1.0.1 - HACS compliance fixes
+
+Fix HACS validation issues:
+- Added missing `logo.png` to brand assets folder
+- Ensured proper placement of documentation field in `manifest.json`
+
 # v1.0.0 - Initial release
 
 Initial import of the Renson WAVES Home Assistant integration.
