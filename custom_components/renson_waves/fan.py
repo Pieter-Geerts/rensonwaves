@@ -29,19 +29,33 @@ async def async_setup_entry(
     coordinator: RensonWavesCoordinator = hass.data[DOMAIN][entry.entry_id]
     
     entities = []
-    
+    room_fans: dict[str, list[str]] = {}
+
     # Get actuator data from coordinator
     if coordinator.data:
         actuators = coordinator.data.get("actuator", {})
-        
+
         for actuator_id, actuator_data in actuators.items():
-            actuator_type = actuator_data.get("type")
-            
-            if actuator_type == "ventilation fan":
+            if not isinstance(actuator_data, dict):
+                continue
+            if actuator_data.get("type") == "ventilation fan":
                 entities.append(
                     VentilationFan(coordinator, entry, actuator_id, actuator_data)
                 )
-    
+                room = actuator_data.get("room", actuator_id)
+                if isinstance(room, (list, tuple)):
+                    room = room[0] if room else actuator_id
+                room_fans.setdefault(str(room), []).append(str(actuator_id))
+
+    for room, actuator_ids in room_fans.items():
+        if len(actuator_ids) > 1:
+            _LOGGER.warning(
+                "WAVES device reports multiple fans (%s) for room %s; "
+                "room boost cannot control them independently",
+                ", ".join(actuator_ids),
+                room,
+            )
+
     async_add_entities(entities)
 
 

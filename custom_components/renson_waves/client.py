@@ -53,40 +53,63 @@ class RensonWavesClient:
         """Get breeze mode configuration."""
         return await self._async_request("/v1/decision/breeze")
 
+    async def _async_get_session(self) -> aiohttp.ClientSession:
+        """Return a reusable, single-connection session for the device."""
+        if self.session is None or self.session.closed:
+            # WAVES devices can reset connections when several endpoints are queried
+            # concurrently. Limit requests to one connection per device.
+            connector = aiohttp.TCPConnector(limit_per_host=1)
+            self.session = aiohttp.ClientSession(connector=connector)
+        return self.session
+
     async def _async_request(
         self, endpoint: str, method: str = "GET", **kwargs: typing.Any
     ) -> dict[str, typing.Any]:
-        """Make a request to the device."""
-        if self.session is None:
-            self.session = aiohttp.ClientSession()
-
+        """Make a request to the device, retrying transient connection failures."""
         url = f"{self.base_url}{endpoint}"
-        
-        try:
-            async with self.session.request(method, url, timeout=aiohttp.ClientTimeout(total=10), **kwargs) as response:
-                if response.status == 200:
-                    return await response.json()
-                else:
-                    _LOGGER.error(
-                        "Error from WAVES device %s: HTTP %s", 
-                        self.host, 
-                        response.status
+        timeout = aiohttp.ClientTimeout(total=10)
+
+        for attempt in range(2):
+            try:
+                session = await self._async_get_session()
+                async with session.request(
+                    method, url, timeout=timeout, **kwargs
+                ) as response:
+                    if response.status == 200:
+                        return await response.json()
+
+                    _LOGGER.warning(
+                        "Error from WAVES device %s: HTTP %s",
+                        self.host,
+                        response.status,
                     )
                     return {}
-        except asyncio.TimeoutError:
-            _LOGGER.error("Timeout connecting to WAVES device %s", self.host)
-            return {}
-        except aiohttp.ClientError as err:
-            _LOGGER.error("Connection error to WAVES device %s: %s", self.host, err)
-            return {}
-        except Exception as err:
-            _LOGGER.error("Unexpected error from WAVES device %s: %s", self.host, err)
-            return {}
+            except (asyncio.TimeoutError, aiohttp.ClientError) as err:
+                if attempt == 0:
+                    _LOGGER.debug(
+                        "Transient connection error to WAVES device %s: %s; retrying",
+                        self.host,
+                        err,
+                    )
+                    await asyncio.sleep(0.5)
+                    continue
+                _LOGGER.warning(
+                    "Connection error to WAVES device %s: %s", self.host, err
+                )
+                return {}
+            except Exception as err:
+                _LOGGER.exception(
+                    "Unexpected error from WAVES device %s: %s", self.host, err
+                )
+                return {}
+
+        return {}
 
     async def async_close(self) -> None:
         """Close the session."""
         if self.session:
             await self.session.close()
+            self.session = None
 
     async def async_set_room_boost(
         self,
@@ -110,14 +133,12 @@ class RensonWavesClient:
             "remaining": int(remaining),
         }
 
-        if self.session is None:
-            self.session = aiohttp.ClientSession()
-
+        session = await self._async_get_session()
         url = f"{self.base_url}{endpoint}"
 
         try:
             _LOGGER.debug("PUT %s payload=%s", url, payload)
-            async with self.session.put(url, json=payload, timeout=aiohttp.ClientTimeout(total=10)) as resp:
+            async with session.put(url, json=payload, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                 if resp.status in (200, 204):
                     _LOGGER.debug("Successfully set room boost for %s", room)
                     return True
@@ -163,14 +184,12 @@ class RensonWavesClient:
             "remaining": int(remaining),
         }
 
-        if self.session is None:
-            self.session = aiohttp.ClientSession()
-
+        session = await self._async_get_session()
         url = f"{self.base_url}/v1/decision/room/boost"
 
         try:
             _LOGGER.debug("PUT %s payload=%s", url, payload)
-            async with self.session.put(
+            async with session.put(
                 url,
                 json=payload,
                 timeout=aiohttp.ClientTimeout(total=10),
@@ -192,14 +211,12 @@ class RensonWavesClient:
 
     async def async_set_decision_silent(self, payload: dict[str, typing.Any]) -> bool:
         """Set silent mode configuration via PUT /v1/decision/silent."""
-        if self.session is None:
-            self.session = aiohttp.ClientSession()
-
+        session = await self._async_get_session()
         url = f"{self.base_url}/v1/decision/silent"
 
         try:
             _LOGGER.debug("PUT %s payload=%s", url, payload)
-            async with self.session.put(
+            async with session.put(
                 url,
                 json=payload,
                 timeout=aiohttp.ClientTimeout(total=10),
