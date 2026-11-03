@@ -14,6 +14,7 @@ from homeassistant.const import (
     UnitOfTemperature,
     PERCENTAGE,
     UnitOfPressure,
+    UnitOfPower,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
@@ -67,6 +68,20 @@ async def async_setup_entry(
             elif sensor_type == "rssi":
                 entities.append(
                     SignalStrengthSensor(coordinator, entry, sensor_id, sensor_data)
+                )
+
+        # The WAVES API exposes the fan's current power draw as the actuator PWM
+        # value. Only create the entity when that value is available.
+        actuators = coordinator.data.get("actuator", {})
+        for actuator_id, actuator_data in actuators.items():
+            if not isinstance(actuator_data, dict):
+                continue
+            if (
+                actuator_data.get("type") == "ventilation fan"
+                and "pwm" in actuator_data.get("parameter", {})
+            ):
+                entities.append(
+                    FanPowerSensor(coordinator, entry, actuator_id, actuator_data)
                 )
 
     # Extra sensors from additional endpoints
@@ -153,7 +168,9 @@ class HumiditySensor(RensonWavesSensorBase):
 class AbsoluteHumiditySensor(RensonWavesSensorBase):
     """Absolute humidity sensor."""
 
-    _attr_native_unit_of_measurement = "g/kg"
+    # WAVES labels this value as g/kg, but its reported values are volumetric
+    # absolute humidity (g/m³).
+    _attr_native_unit_of_measurement = "g/m³"
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_name = "Absolute Humidity"
 
@@ -165,6 +182,43 @@ class AbsoluteHumiditySensor(RensonWavesSensorBase):
         params = sensor.get("parameter", {})
         humidity = params.get("humidity", {}).get("value")
         return float(humidity) if humidity is not None else None
+
+
+class FanPowerSensor(CoordinatorEntity, SensorEntity):
+    """Power draw reported by a WAVES ventilation fan."""
+
+    _attr_has_entity_name = True
+    _attr_device_class = SensorDeviceClass.POWER
+    _attr_native_unit_of_measurement = UnitOfPower.WATT
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_name = "Power"
+
+    def __init__(
+        self,
+        coordinator: RensonWavesCoordinator,
+        entry: ConfigEntry,
+        actuator_id: str,
+        actuator_data: dict[str, Any],
+    ) -> None:
+        """Initialize the fan power sensor."""
+        super().__init__(coordinator)
+        self.actuator_id = actuator_id
+        serial = str(entry.data.get("serial", entry.entry_id))
+        self._attr_unique_id = f"{serial}_fan_{actuator_id}_power"
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, serial)},
+            name=entry.title,
+            manufacturer="Renson",
+            model="WAVES",
+        )
+
+    @property
+    def native_value(self) -> float | None:
+        """Return the fan power in watts."""
+        actuators = self.coordinator.data.get("actuator", {})
+        actuator = actuators.get(self.actuator_id, {})
+        power = actuator.get("parameter", {}).get("pwm", {}).get("value")
+        return float(power) if power is not None else None
 
 
 class VOCSensor(RensonWavesSensorBase):

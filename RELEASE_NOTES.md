@@ -1,3 +1,11 @@
+# v1.0.2 - Sensor and reliability improvements
+
+- Added a fan Power sensor using `SensorDeviceClass.POWER` and watts (`W`).
+- Corrected the absolute humidity unit from `g/kg` to `g/m³`.
+- Retried transient WAVES connection failures and serialized requests to reduce connection resets.
+- Documented boost and silent-mode services.
+- Documented the device API limitation for multiple fans in the same room.
+
 # v1.0.1 - HACS compliance fixes
 
 Fix HACS validation issues:

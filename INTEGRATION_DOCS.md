@@ -22,7 +22,8 @@ Integration (__init__.py)
 │   ├── Humidity (Absolute)
 │   ├── VOC (AVOC)
 │   ├── Pressure
-│   └── Signal Strength (RSSI)
+│   ├── Signal Strength (RSSI)
+│   └── Fan Power
 └── Fan Platform (fan.py)
     └── Ventilation Fan Control
 ```
@@ -103,6 +104,7 @@ Integration (__init__.py)
 
 ### 2. Sensor Support
 - **Environmental**: Temperature, Humidity, Pressure
+- **Power**: Fan power in watts, reported by the device PWM value
 - **Air Quality**: AVOC/VOC levels
 - **Connectivity**: WiFi signal strength (RSSI)
 - **System**: Memory/heap diagnostics

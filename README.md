@@ -6,8 +6,8 @@ A Home Assistant integration for Renson WAVES ventilation devices.
 
 ## Features
 
-- **Sensor Support**: Temperature, Humidity, Absolute Humidity, AVOC (VOC), Pressure, Signal Strength
-- **Fan Control**: View fan speed and control ventilation (when control endpoints are available)
+- **Sensor Support**: Temperature, Humidity, Absolute Humidity, AVOC (VOC), Pressure, Signal Strength, and fan Power
+- **Fan Control**: View fan speed and control ventilation through room boost
 - **Local Polling**: Fetches data directly from the device on your local network
 - **HACS Compatible**: Install directly from Home Assistant Community Store
 
@@ -49,15 +49,16 @@ After installation, add the integration through the UI:
 | ----------------- | ---- | --------------- |
 | Temperature       | °C   | Temperature     |
 | Humidity          | %    | Humidity        |
-| Absolute Humidity | g/kg | Humidity        |
+| Absolute Humidity | g/m³ | Humidity        |
+| Fan Power         | W    | Power           |
 | AVOC (VOC)        | ppm  | Air Quality     |
 | Pressure          | Pa   | Pressure        |
 | Signal Strength   | dBm  | Signal Strength |
 
 ## Known Limitations
 
-- **Fan Control**: Currently read-only. Full control requires discovering the POST/PUT endpoints
-- **Manual Speed Control**: Not yet implemented (requires control endpoints)
+- **Room-based fan control**: Boost commands target a WAVES room identifier. Multiple fans reported for one room cannot be controlled independently.
+- **Manual speed control**: Speed requests are translated to the device's room boost level.
 
 ## API Endpoints Used
 
@@ -71,6 +72,50 @@ After installation, add the integration through the UI:
 - `GET /v1/decision/silent` - Silent mode configuration
 - `PUT /v1/decision/silent` - Silent mode configuration update
 - `GET /v1/decision/breeze` - Breeze mode configuration
+
+## Services
+
+All services are available under the `renson_waves` domain.
+
+### `start_room_boost`
+
+Starts a boost for a room. `room` is the numeric room identifier reported by the
+WAVES API; `level` (0–200), `timeout` (seconds), and `remaining` (seconds) are
+optional.
+
+```yaml
+action: renson_waves.start_room_boost
+data:
+  room: 0
+  level: 100
+  timeout: 900
+```
+
+### `stop_room_boost`
+
+Stops the boost for a room.
+
+```yaml
+action: renson_waves.stop_room_boost
+data:
+  room: 0
+```
+
+### `set_room_boost_default`
+
+Sets the device-wide fallback boost settings when a room-specific boost endpoint
+is not available. It accepts `enable`, `level`, `timeout`, and `remaining`.
+
+### `set_silent_mode`
+
+Updates silent-mode settings. Supply either a complete `payload` object or one or
+more of `enable`, `reduction`, and weekday schedule objects.
+
+## Fan control limitation
+
+WAVES boost control is room-based. If a device reports multiple ventilation fans
+for the same room identifier, the device API cannot distinguish them through the
+room boost endpoint, so they cannot be boosted independently by this integration.
 
 ## Troubleshooting
 
